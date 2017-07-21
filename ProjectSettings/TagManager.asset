@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Background
   - Animal
+  - WayPoint
+  - Tree
+  - Trap
   layers:
   - Default
   - TransparentFX

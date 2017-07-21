@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 public class Char_control : MonoBehaviour {
 
-    public Vector2 speed = new Vector2(5f, 2f);//캐릭터의 속도
+    //public Vector2 speed = new Vector2(5f, 2f);//캐릭터의 속도
+    public float speed;
     
     public Vector2 targetPosition;//마우스로 클릭한 위치
     public Vector2 relativePosition;//지금 캐릭터의 위치와 비교한 상대적인 위치(어느 방향, 얼마나 멀리)
@@ -21,13 +22,14 @@ public class Char_control : MonoBehaviour {
     public float meatFillAmount; //Fill Amount for UI Image
 
     public static bool collided = false;//부딪혔는지 아닌지
+    public bool tree_collided = false;
+    public Collider2D hitCollider;
+
+    bool clicked = false;
 
     private void Start()
     {
-        //meatSliderValue = GameObject.Find("meatSlider").GetComponent<Slider>().value;
-        //transform.position = new Vector3(-5f, -1f, 0f);
-        //meatBar = GameObject.Find("meatFill").GetComponent<Image>();
-        //meatFillAmount = meatBar.fillAmount;
+        speed = 3.0f;
     }
 
     void Update()
@@ -36,6 +38,9 @@ public class Char_control : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            //Debug.Log("targetpos is " + targetPosition);
+            //hitCollider = Physics2D.OverlapPoint(targetPosition);
+            clicked = true;
         }
 
         //현재위치에 따른 상대적인 위치를 구한다 (클릭한 위치-현재 위치)
@@ -49,45 +54,34 @@ public class Char_control : MonoBehaviour {
 
     void FixedUpdate()
     {
-        // 5 - If you are about to overshoot the target, reduce velocity to that distance
-        //      Else cap the Movement by a maximum speed per direction (x then y)
-        if (speed.x * Time.deltaTime >= Mathf.Abs(relativePosition.x))
-        {
-            movement.x = relativePosition.x;
-        }
-        else
-        {
-            movement.x = speed.x * Mathf.Sign(relativePosition.x);
-        }
-        if (speed.y * Time.deltaTime >= Mathf.Abs(relativePosition.y))
-        {
-            movement.y = relativePosition.y;
-        }
-        else
-        {
-            movement.y = speed.y * Mathf.Sign(relativePosition.y);
-        }
 
-        //방향에 따라 캐릭터의 x축 방향을 뒤집는다
-        if(movement.x<0)
+        if(relativePosition.x>0)
+        {
+            GetComponent<SpriteRenderer>().flipX = true;
+        }
+        else if (relativePosition.x < 0)
         {
             GetComponent<SpriteRenderer>().flipX = false;
         }
-        else
+        if(clicked)
         {
-            GetComponent<SpriteRenderer>().flipX =true;
+            Vector2 nowpos = new Vector2(gameObject.transform.position.x, gameObject.transform.position.y);
+            //Debug.Log(nowpos + " is nowpos and " + targetPosition + "is targetpos");
+            gameObject.transform.position = Vector2.MoveTowards(nowpos, targetPosition, speed*Time.deltaTime);
         }
         
-        //물리엔진을 사용하여 캐릭터를 움직인다
-        GetComponent<Rigidbody2D>().velocity = movement;
-
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.tag=="Animal")
+        if (other.tag == "Animal")
         {
             collided = true;//부딪힌게 true
+        }
+        else if (other.tag == "Tree")//나무랑 부딪혔으면
+        {
+            tree_collided = true;
+            Debug.Log("collided tree on char script");
         }
     }
 
