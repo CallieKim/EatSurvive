@@ -21,7 +21,7 @@ public class Badger_move : MonoBehaviour {
     float min_distance = -2.0f;
     float max_distance = 2.0f;
 
-    Animator anim;
+    Animator anim;//오소리의 animator
 
 
 	// Use this for initialization

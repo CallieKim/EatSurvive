@@ -11,8 +11,13 @@ public class Bar_control : MonoBehaviour {
     public float dec_delay;
     GameObject player;
 
-	// Use this for initialization
-	void Start () {
+    private void Awake()//해상도 조절 함수
+    {
+        Screen.SetResolution(Screen.width, Screen.width*16/9, true);
+    }
+
+    // Use this for initialization
+    void Start () {
         cur_health = max_health;
         InvokeRepeating("decreaseHealth",0.5f,dec_delay);
         player= GameObject.FindGameObjectWithTag("Player");

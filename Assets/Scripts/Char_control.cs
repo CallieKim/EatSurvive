@@ -4,6 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 public class Char_control : MonoBehaviour {
 
+    public enum MovementState
+    {
+        idle, walking, running, dead
+    }
+
+    MovementState MovementType;
+
     //public Vector2 speed = new Vector2(5f, 2f);//캐릭터의 속도
     public float speed;
     
@@ -27,9 +34,15 @@ public class Char_control : MonoBehaviour {
 
     bool clicked = false;
 
+    Animator anim;//캐릭터의 animator
+
+    private DoubleClickListener dbl = new DoubleClickListener(); // (optionnal: pass a float as the delay)
+
+
     private void Start()
     {
         speed = 3.0f;
+        anim = gameObject.GetComponent<Animator>();
     }
 
     void Update()
@@ -41,6 +54,15 @@ public class Char_control : MonoBehaviour {
             //Debug.Log("targetpos is " + targetPosition);
             //hitCollider = Physics2D.OverlapPoint(targetPosition);
             clicked = true;
+            MovementType = MovementState.walking;
+            if(dbl.isDoubleClicked())
+            {
+                Debug.Log("double clicked");
+                MovementType = MovementState.running;
+                anim.SetBool("is_run", true);
+                anim.SetBool("is_idle", false);
+                anim.SetBool("is_walk", false);
+            }
         }
 
         //현재위치에 따른 상대적인 위치를 구한다 (클릭한 위치-현재 위치)
@@ -48,6 +70,32 @@ public class Char_control : MonoBehaviour {
         relativePosition = new Vector2(
             targetPosition.x - gameObject.transform.position.x,
             targetPosition.y - gameObject.transform.position.y);
+
+        if (MovementType == MovementState.walking)
+        {
+            anim.SetBool("is_walk", true);
+            anim.SetBool("is_idle", false);
+            anim.SetBool("is_run", false);
+        }
+        else if (MovementType == MovementState.idle)
+        {
+            anim.SetBool("is_idle", true);
+            anim.SetBool("is_walk", false);
+            anim.SetBool("is_run", false);
+        }
+        else if (MovementType == MovementState.running)
+        {
+            anim.SetBool("is_run", true);
+        }
+        else if (MovementType == MovementState.dead)
+        {
+            anim.SetBool("is_dead", true);
+        }
+
+        if (gameObject.transform.position.x == targetPosition.x && gameObject.transform.position.y == targetPosition.y)
+        {
+            MovementType = MovementState.idle;
+        }
 
 
     }
@@ -65,9 +113,10 @@ public class Char_control : MonoBehaviour {
         }
         if(clicked)
         {
+            //MovementType = MovementState.walking;
             Vector2 nowpos = new Vector2(gameObject.transform.position.x, gameObject.transform.position.y);
             //Debug.Log(nowpos + " is nowpos and " + targetPosition + "is targetpos");
-            gameObject.transform.position = Vector2.MoveTowards(nowpos, targetPosition, speed*Time.deltaTime);
+            gameObject.transform.position = Vector2.MoveTowards(nowpos, targetPosition, speed*Time.deltaTime);//클릭한 위치로 이동
         }
         
     }
