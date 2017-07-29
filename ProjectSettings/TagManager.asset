@@ -9,6 +9,8 @@ TagManager:
   - WayPoint
   - Tree
   - Trap
+  - meat
+  - wood
   layers:
   - Default
   - TransparentFX

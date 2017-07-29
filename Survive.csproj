@@ -81,6 +81,7 @@
     <Compile Include="Assets\Scripts\Badger_control.cs" />
     <Compile Include="Assets\Scripts\Badger_move.cs" />
     <Compile Include="Assets\Scripts\Bar_control.cs" />
+    <Compile Include="Assets\Scripts\Bar_meat_control.cs" />
     <Compile Include="Assets\Scripts\Camera_control.cs" />
     <Compile Include="Assets\Scripts\Char_control.cs" />
     <Compile Include="Assets\Scripts\DoubleClickListener.cs" />

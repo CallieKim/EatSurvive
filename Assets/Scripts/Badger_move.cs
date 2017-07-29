@@ -108,7 +108,7 @@ public class Badger_move : MonoBehaviour {
     {
         if(col.CompareTag("WayPoint"))
         {
-            Debug.Log("entered waypoint");
+            //Debug.Log("entered waypoint");
             Destroy(WP);
             wayP = false;
             MovementType = MovementState.idle;
