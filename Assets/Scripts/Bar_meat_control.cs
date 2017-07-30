@@ -37,17 +37,17 @@ public class Bar_meat_control : MonoBehaviour {
         }
         if(player.GetComponent<Char_control>().MovementType==Char_control.MovementState.running)//player가 뛰는상태라면 체력이 더 급격하게 감소해야 한다
         {
-            Debug.Log("run_dec_health");
+            //Debug.Log("run_dec_health");
             dec_health =run_dec_health;//체력이 감소되는 양을 뛸때 감소되는 양으로 바꾼다
         }
         if (player.GetComponent<Char_control>().MovementType == Char_control.MovementState.walking)//player가 걷는상태라면 체력 감소되는 양을 원래대로 롤백
         {
-            Debug.Log("walk_dec_health");
+            //Debug.Log("walk_dec_health");
             dec_health = walk_dec_health;//체력이 감소되는 양을 걸을때 감소되는 양으로 바꾼다
         }
         if (player.GetComponent<Char_control>().MovementType == Char_control.MovementState.idle)//player가 idle상태라면 체력 감소되는 양을 원래대로 롤백
         {
-            Debug.Log("idle_dec_health");
+            //Debug.Log("idle_dec_health");
             dec_health = walk_dec_health;//체력이 감소되는 양을 걸을때 감소되는 양으로 바꾼다
         }
     }

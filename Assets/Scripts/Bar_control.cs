@@ -25,6 +25,7 @@ public class Bar_control : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        /*
         if (Char_control.collided == true)//동물이랑 부딪쳤으면
         {
             cur_health -= 10f;
@@ -39,6 +40,7 @@ public class Bar_control : MonoBehaviour {
             setHealth(calc_health);
             player.GetComponent<Char_control>().tree_collided = false;
         }
+        */
 	}
 
     void decreaseHealth()

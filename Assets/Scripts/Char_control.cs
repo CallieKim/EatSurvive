@@ -48,6 +48,26 @@ public class Char_control : MonoBehaviour {
         anim = gameObject.GetComponent<Animator>();
     }
 
+    void range_restrict()//클릭한 위치가 화면 위치를 벗어나는것을 막는 함수
+    {
+        if (targetPosition.y > 3.24f)
+        {
+            targetPosition.y = 3.24f;
+        }
+        else if (targetPosition.y < -1.73f)
+        {
+            targetPosition.y = -1.73f;
+        }
+        if (targetPosition.x > 6.4f)
+        {
+            targetPosition.x = 6.4f;
+        }
+        else if (targetPosition.x < -6.4f)
+        {
+            targetPosition.x = -6.4f;
+        }
+    }
+
     void Update()
     {
         //마우스로 클릭한 위치 받는다
@@ -57,8 +77,12 @@ public class Char_control : MonoBehaviour {
             //Debug.Log("targetpos is " + targetPosition);
             //hitCollider = Physics2D.OverlapPoint(targetPosition);
             clicked = true;//클릭했으므로 true로 설정
-            //MovementType = MovementState.walking;
-            if(dbl.isDoubleClicked())//그러나 만약 두번 클릭했으면
+                           //MovementType = MovementState.walking;
+                           //Debug.Log("target position is x: " + targetPosition.x + ", y: " + targetPosition.y);
+
+            range_restrict();//클릭한 위치가 화면 위치를 벗어나는것을 막는 함수
+
+            if (dbl.isDoubleClicked())//그러나 만약 두번 클릭했으면
             {
                 //Debug.Log("double clicked");
                 MovementType = MovementState.running;//플레이어는 뛰는 상태로 바뀐다
@@ -104,7 +128,7 @@ public class Char_control : MonoBehaviour {
             anim.SetBool("is_dead", true);
         }
 
-        if (gameObject.transform.position.x == targetPosition.x && gameObject.transform.position.y == targetPosition.y)
+        if (gameObject.transform.position.x == targetPosition.x && gameObject.transform.position.y == targetPosition.y)//클릭한 곳에 도착했으면 평상시 상태로 바뀐다
         {
             MovementType = MovementState.idle;
         }
@@ -125,14 +149,14 @@ public class Char_control : MonoBehaviour {
         }
         if(clicked)//클릭했다면
         {
-            Vector2 nowpos = new Vector2(gameObject.transform.position.x, gameObject.transform.position.y);
+            Vector2 nowpos = new Vector2(gameObject.transform.position.x, gameObject.transform.position.y);//현재 위치
             if (MovementType == MovementState.walking)//걷는 상태라면 걷기 속도로 이동
             {
-             gameObject.transform.position = Vector2.MoveTowards(nowpos, targetPosition, walk_speed * Time.deltaTime);//클릭한 위치로 이동
+             gameObject.transform.position = Vector2.MoveTowards(nowpos, targetPosition, walk_speed * Time.deltaTime);//현재위치에서 클릭한 위치로 이동
             }
             else if(MovementType==MovementState.running)//뛰는 상태라면 뛰는 속도로 이동
             {
-                gameObject.transform.position = Vector2.MoveTowards(nowpos, targetPosition, run_speed * Time.deltaTime);//클릭한 위치로 이동
+                gameObject.transform.position = Vector2.MoveTowards(nowpos, targetPosition, run_speed * Time.deltaTime);//현재위치에서 클릭한 위치로 이동
             }
         }
         
@@ -146,14 +170,22 @@ public class Char_control : MonoBehaviour {
         }
         else if (other.tag == "Tree")//나무랑 부딪혔으면
         {
-            tree_collided = true;
+            //tree_collided = true;
             Debug.Log("collided tree on char script");
+            other.GetComponent<Tree_control>().disappear();
         }
+        
         else if(other.tag=="meat")//고기랑 부딪혔으면
         {
-            meat_collided = true;
-            //other.GetComponent<SpriteRenderer>.enabled = false;
+            Debug.Log("meat collided");
+            //meat_collided = true;
+            //other.GetComponent<GameObject>().GetComponent<SpriteRenderer>().enabled = false;
+            //GameObject.FindGameObjectWithTag("meat").GetComponent<SpriteRenderer>().enabled = false;
+            other.GetComponent<meat_control>().disappear();
+            
+            
         }
+        
     }
 
     
