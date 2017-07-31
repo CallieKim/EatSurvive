@@ -5,9 +5,12 @@ using UnityEngine;
 public class meat_control : MonoBehaviour {
 
     bool meat_col;
-	// Use this for initialization
-	void Start () {
+    Bar_meat_control bar_meat;
+
+    // Use this for initialization
+    void Start () {
         meat_col = false;
+        bar_meat = GameObject.Find("meatFill").GetComponent<Bar_meat_control>();//체력 게이지의 script를 찾아서 저장
 	}
 	
 	// Update is called once per frame
@@ -26,6 +29,7 @@ public class meat_control : MonoBehaviour {
         if(meat_col)//meat를 클릭했을때만 사라진다
         {
             gameObject.SetActive(false);
+            bar_meat.increaseHealth(10f);//체력 게이지를 10f만큼 증가시킨다
         }
     }
     /*

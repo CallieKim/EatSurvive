@@ -126,6 +126,9 @@ public class Char_control : MonoBehaviour {
         else if (MovementType == MovementState.dead)
         {
             anim.SetBool("is_dead", true);
+            anim.SetBool("is_run", false);
+            anim.SetBool("is_idle", false);
+            anim.SetBool("is_walk", false);
         }
 
         if (gameObject.transform.position.x == targetPosition.x && gameObject.transform.position.y == targetPosition.y)//클릭한 곳에 도착했으면 평상시 상태로 바뀐다

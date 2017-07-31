@@ -30,9 +30,7 @@ public class Bar_meat_control : MonoBehaviour {
     {
         if (Char_control.collided == true)//동물이랑 부딪쳤으면
         {
-            cur_health -= 10f;
-            float calc_health = cur_health / max_health;
-            setHealth(calc_health);
+            decreaseHealthWithDec(10f);//인자 10f만큼 체력을 감소시킨다
             Char_control.collided = false;
         }
         if(player.GetComponent<Char_control>().MovementType==Char_control.MovementState.running)//player가 뛰는상태라면 체력이 더 급격하게 감소해야 한다
@@ -50,11 +48,35 @@ public class Bar_meat_control : MonoBehaviour {
             //Debug.Log("idle_dec_health");
             dec_health = walk_dec_health;//체력이 감소되는 양을 걸을때 감소되는 양으로 바꾼다
         }
+        if(cur_health<0)//체력이 0이 될때
+        {
+            cur_health = 0f;
+            Debug.Log("player dead");
+            CancelInvoke("decreaseHealth");//체력이 감소되는 함수를 취소하고
+            player.GetComponent<Char_control>().MovementType = Char_control.MovementState.dead;//캐릭터 상태를 죽은 상태로 바꾼다
+        }
+        else if(cur_health>100)//최대 체력을 100으로 고정시킨다
+        {
+            cur_health = 100;
+        }
     }
 
-    void decreaseHealth()
+    public void decreaseHealth()//script의 dec_health만큼 감소시킨다
     {
         cur_health -= dec_health;
+        float calc_health = cur_health / max_health;
+        setHealth(calc_health);
+    }
+    public void decreaseHealthWithDec(float dec)//인자 dec만큼 체력을 감소시킨다
+    {
+        cur_health -= dec;
+        float calc_health = cur_health / max_health;
+        setHealth(calc_health);
+    }
+
+    public void increaseHealth(float inc_health)//인자 inc_health만큼 체력을 증가시킨다
+    {
+        cur_health += inc_health;
         float calc_health = cur_health / max_health;
         setHealth(calc_health);
     }
