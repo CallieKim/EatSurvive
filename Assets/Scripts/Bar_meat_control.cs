@@ -20,7 +20,7 @@ public class Bar_meat_control : MonoBehaviour {
     {
         cur_health = max_health;
         walk_dec_health = dec_health;
-        run_dec_health = dec_health + 0.2f;
+        run_dec_health = dec_health + 0.5f;
         InvokeRepeating("decreaseHealth", 0.5f, dec_delay);//0.5초후에 깎이는데, dec_delay만큼 decreaseHealth함수를 반복한다
         player = GameObject.FindGameObjectWithTag("Player");
     }

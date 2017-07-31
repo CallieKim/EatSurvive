@@ -6,7 +6,7 @@ public class Badger_move : MonoBehaviour {
 
     public enum MovementState
     {
-        idle,walking,dead
+        idle,walking,dead,fire_walking
     }
 
     public MovementState MovementType;
@@ -40,18 +40,34 @@ public class Badger_move : MonoBehaviour {
         if (MovementType == MovementState.walking)
         {
             anim.SetBool("is_moving",true);
+            anim.SetBool("is_idle", false);
+            anim.SetBool("is_dead", false);
+            anim.SetBool("is_onFire", false);
             createWaypoint();
         }
         else if(MovementType==MovementState.idle)
         {
             anim.SetBool("is_idle", true);
+            anim.SetBool("is_moving", false);
+            anim.SetBool("is_dead", false);
+            anim.SetBool("is_onFire", false);
         }
         else if(MovementType==MovementState.dead)
         {
             anim.SetBool("is_dead", true);
+            anim.SetBool("is_idle", false);
+            anim.SetBool("is_moving", false);
+            anim.SetBool("is_onFire", false);
+        }
+        else if (MovementType == MovementState.fire_walking)
+        {
+            anim.SetBool("is_onFire", true);
+            anim.SetBool("is_dead", false);
+            anim.SetBool("is_idle", false);
+            anim.SetBool("is_moving", false);
         }
 
-        if(wayP)
+        if (wayP)
         {
             move();
         }

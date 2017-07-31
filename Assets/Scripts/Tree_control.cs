@@ -9,12 +9,14 @@ public class Tree_control : MonoBehaviour {
     GameObject player;
 
     bool tree_col;
+    Bar_fire_control bar_fire;
 
     // Use this for initialization
     void Start () {
         //theSprite = gameObject.GetComponent<SpriteRenderer>();
         //player = GameObject.FindGameObjectWithTag("Player");
         tree_col = false;
+        bar_fire = GameObject.Find("fireFill").GetComponent<Bar_fire_control>();
     }
 	
 	// Update is called once per frame
@@ -39,6 +41,7 @@ public class Tree_control : MonoBehaviour {
         if(tree_col)//나무를 클릭했으면
         {
             gameObject.SetActive(false);//나무는 사라져도 된다
+            bar_fire.increaseHealth(10f);//장작 게이지가 10f만큼 증가한다
         }
         //gameObject.SetActive(false);
     }

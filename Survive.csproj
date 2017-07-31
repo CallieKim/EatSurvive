@@ -81,11 +81,13 @@
     <Compile Include="Assets\Scripts\Badger_control.cs" />
     <Compile Include="Assets\Scripts\Badger_move.cs" />
     <Compile Include="Assets\Scripts\Bar_control.cs" />
+    <Compile Include="Assets\Scripts\Bar_fire_control.cs" />
     <Compile Include="Assets\Scripts\Bar_meat_control.cs" />
     <Compile Include="Assets\Scripts\Camera_control.cs" />
     <Compile Include="Assets\Scripts\Char_control.cs" />
     <Compile Include="Assets\Scripts\DoubleClickListener.cs" />
     <Compile Include="Assets\Scripts\Tree_control.cs" />
+    <Compile Include="Assets\Scripts\flint_skill.cs" />
     <Compile Include="Assets\Scripts\meat_control.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
