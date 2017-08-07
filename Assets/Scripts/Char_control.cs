@@ -41,6 +41,7 @@ public class Char_control : MonoBehaviour {
     public bool running = false;
 
     flint_skill flintSkill;
+    trap_skill trapSkill;
 
 
     private void Start()
@@ -49,6 +50,7 @@ public class Char_control : MonoBehaviour {
         run_speed = 5.0f;//플레이어 뛰는 속도 설정한다
         anim = gameObject.GetComponent<Animator>();
         flintSkill = GameObject.Find("skillButton_flint").GetComponent<flint_skill>();
+        trapSkill = GameObject.Find("skillButton_trap").GetComponent<trap_skill>();
     }
 
     void range_restrict()//클릭한 위치가 화면 위치를 벗어나는것을 막는 함수
@@ -74,7 +76,7 @@ public class Char_control : MonoBehaviour {
     void Update()
     {
         //마우스로 클릭한 위치 받는다
-        if (Input.GetKeyDown(KeyCode.Mouse0) && !flintSkill.flint_click)//한번 클릭했으면 그리고 스킬을 누른 상태가 아니라면
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !flintSkill.flint_click && !trapSkill.trap_click)//한번 클릭했으면 그리고 스킬들을 누른 상태가 아니라면
         {
             targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             //Debug.Log("targetpos is " + targetPosition);
@@ -105,6 +107,11 @@ public class Char_control : MonoBehaviour {
         {
             anim.SetBool("is_onFire", true);//불에 타는 상태로 바뀐다
             flintSkill.flint_click = false;//다시 스킬 눌렀는지 확인하는 변수를 false로 설정한다->그래야 움직일 수 있음
+        }
+        else if(trapSkill.trap_click)//trap 스킬을 누른상태라면 trap이 생성된다
+        {
+            //Debug.Log("should make trap");
+            trapSkill.trap_click = false;//다시 스킬 눌렀는지 확인하는 변수를 false로 설정한다->그래야 움직일 수 있음
         }
 
         //현재위치에 따른 상대적인 위치를 구한다 (클릭한 위치-현재 위치)

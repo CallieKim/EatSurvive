@@ -51,15 +51,15 @@ TagManager:
   - name: Background
     uniqueID: 3055015031
     locked: 0
-  - name: UI_bar
-    uniqueID: 3033682707
-    locked: 0
-  - name: UI
-    uniqueID: 949300363
-    locked: 0
   - name: animal
     uniqueID: 2793406065
     locked: 0
   - name: character
     uniqueID: 738868525
+    locked: 0
+  - name: UI_bar
+    uniqueID: 3033682707
+    locked: 0
+  - name: UI
+    uniqueID: 949300363
     locked: 0

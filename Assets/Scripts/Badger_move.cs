@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Badger_move : MonoBehaviour {
+    public GameObject meatOriginal;//복사대상이 될 고기
+    public GameObject badger;
+    public bool madeMeat;//고기를 만들었는지 확인하는 변수
 
     public enum MovementState
     {
@@ -33,6 +36,9 @@ public class Badger_move : MonoBehaviour {
     void Start()
     {
         StartCoroutine(ChooseAction());
+        meatOriginal = GameObject.FindGameObjectWithTag("meat");
+        badger = GameObject.Find("badger");
+        madeMeat = false;
     }
 
     // Update is called once per frame
@@ -52,12 +58,19 @@ public class Badger_move : MonoBehaviour {
             anim.SetBool("is_dead", false);
             anim.SetBool("is_onFire", false);
         }
-        else if(MovementType==MovementState.dead)
+        else if(MovementType==MovementState.dead)//죽은후에 고기생성, 1초후에 사라져야 한다
         {
             anim.SetBool("is_dead", true);
             anim.SetBool("is_idle", false);
             anim.SetBool("is_moving", false);
             anim.SetBool("is_onFire", false);
+            if (!madeMeat)//고기를 아직 생성하지 않았다면
+            {
+                Instantiate(meatOriginal, new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity);//고기를 그 자리에서 한번만 생성한다
+                madeMeat = true;//고기를 생성했다
+            }
+            //Instantiate(meatOriginal,new Vector3(transform.position.x,transform.position.y,0), Quaternion.identity);//고기를 그 자리에서 생성한다
+            StartCoroutine(Dead());//죽었을때 실행되는 함수 코루틴을 부른다
         }
         else if (MovementType == MovementState.fire_walking)
         {
@@ -81,6 +94,7 @@ public class Badger_move : MonoBehaviour {
             float distanceY= transform.position.y + Random.Range(min_distance, max_distance);
             WP = Instantiate(Waypoint, new Vector2(distanceX,distanceY),Quaternion.identity) as GameObject;
             wayP = true;
+           
         }
         
     }
@@ -120,6 +134,19 @@ public class Badger_move : MonoBehaviour {
         }
     }
 
+    IEnumerator Dead()//죽었을때 실행된다
+    {
+        while(true)
+        {
+            wayP = false;//움직이지 않는다
+            Destroy(WP);
+            yield return new WaitForSeconds(0.7f);//0.7초동안 기다린다
+            //wayP = false;//움직이지 않는다
+            //Destroy(WP);
+            badger.SetActive(false);//사라진다
+        }
+    }
+
     void OnTriggerEnter2D(Collider2D col)
     {
         if(col.CompareTag("WayPoint"))
@@ -131,11 +158,16 @@ public class Badger_move : MonoBehaviour {
         }
         else if (col.tag == "Trap")
         {
-            col.GetComponent<SpriteRenderer>().enabled = false;
-            GameObject.FindGameObjectWithTag("Trap").GetComponent<SpriteRenderer>().enabled = false;
-            MovementType = MovementState.dead;
+            //col.GetComponent<SpriteRenderer>().enabled = false;
+            //GameObject.FindGameObjectWithTag("Trap").GetComponent<SpriteRenderer>().enabled = false;
+               // col.GetComponent<trap_control>().disappear();//함정은 사라진다
+                col.gameObject.SetActive(false);//부딪힌 함정만 사라진다
+                MovementType = MovementState.dead;
+            //col.GetComponent<trap_control>().disappear();//함정은 사라진다
+            //MovementType = MovementState.dead;
 
         }
 
     }
+
 }
