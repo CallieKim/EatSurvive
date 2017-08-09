@@ -6,6 +6,10 @@ public class Badger_move : MonoBehaviour {
     public GameObject meatOriginal;//복사대상이 될 고기
     public GameObject badger;
     public bool madeMeat;//고기를 만들었는지 확인하는 변수
+    public bool trapSense;//함정을 감지하는지 판단하는 변수
+    public bool collided_player;//플레이어와 부딪혔는지 아닌지 판단하는 변수
+    public int amountOfClicks;
+    private DoubleClickListener dbl;// = new DoubleClickListener(); // (optionnal: pass a float as the delay)
 
     public enum MovementState
     {
@@ -14,7 +18,8 @@ public class Badger_move : MonoBehaviour {
 
     public MovementState MovementType;
 
-    float speed = 0.8f;
+    public float speed = 0.8f;
+    float speed_attacked;
     //float rotateSpeed = 2.0f;
 
     public GameObject Waypoint;
@@ -39,6 +44,11 @@ public class Badger_move : MonoBehaviour {
         meatOriginal = GameObject.FindGameObjectWithTag("meat");
         badger = GameObject.Find("badger");
         madeMeat = false;
+        collided_player = false;
+        amountOfClicks = 0;
+        speed_attacked=speed*0.1f;
+        dbl = gameObject.AddComponent<DoubleClickListener>();
+        
     }
 
     // Update is called once per frame
@@ -84,7 +94,16 @@ public class Badger_move : MonoBehaviour {
         {
             move();
         }
-	}
+
+        if (Input.GetKeyDown(KeyCode.Mouse0) && collided_player) {//플레이어와 부딪힌상태에서 2번 클릭했으면
+            if (dbl.isDoubleClicked())
+            {
+                //Debug.Log("badger double clicked");
+                gameObject.SetActive(false);
+            }
+        }
+
+    }
 
     void createWaypoint()//목표지점 생성
     {
@@ -156,18 +175,59 @@ public class Badger_move : MonoBehaviour {
             wayP = false;
             MovementType = MovementState.idle;
         }
-        else if (col.tag == "Trap")
+        else if (col.tag == "Trap")//동물이 함정이랑 부딪히면 발생
         {
             //col.GetComponent<SpriteRenderer>().enabled = false;
             //GameObject.FindGameObjectWithTag("Trap").GetComponent<SpriteRenderer>().enabled = false;
                // col.GetComponent<trap_control>().disappear();//함정은 사라진다
-                col.gameObject.SetActive(false);//부딪힌 함정만 사라진다
-                MovementType = MovementState.dead;
+                //col.gameObject.SetActive(false);//부딪힌 함정만 사라진다
+            badger.SetActive(false);//오소리는 사라진다
+            col.GetComponent<trap_control>().Change();//부딪힌 함정의 모습이 바뀐다
+                //MovementType = MovementState.dead;
             //col.GetComponent<trap_control>().disappear();//함정은 사라진다
             //MovementType = MovementState.dead;
 
         }
+        else if(col.tag=="Player")//플레이어와 부딪혔을때
+        {
+            Debug.Log("badger collided with player");
+            collided_player = true;
+        }
 
     }
 
+    private void OnTriggerExit2D(Collider2D collision)//부딪히는 범위에서 빠져나왔으면
+    {
+        if(collision.tag=="Player")
+        {
+            collided_player = false;
+        }
+    }
+    /*
+    private void OnMouseDown()//오소리를 클릭했을때 호출된다
+    {
+        Debug.Log("clicked badger");
+        if(collided_player)//클릭한 상태에서 플레이어와 부딪혔으면
+        {
+            speed = speed_attacked;
+            if(amountOfClicks>3)
+            {
+                gameObject.SetActive(false);
+            }
+            else
+            {
+                amountOfClicks++;
+            }
+        }
+    }
+    */
+    /*
+    private void OnMouseOver()
+    {
+        if(Input.GetMouseButtonDown(0))
+        {
+            Debug.Log("clicked badger");
+        }
+    }
+    */
 }

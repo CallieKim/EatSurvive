@@ -31,6 +31,7 @@ public class DoubleClickListener : MonoBehaviour {
         }
         else
         {
+            //Debug.Log("doubleclick true");
             firstClick = false;
             return true;
         }

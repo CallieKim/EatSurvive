@@ -39,6 +39,11 @@ public class Bar_fire_control : MonoBehaviour {
             dec_health = dec_fire_health;
             //Debug.Log("dec_fire_health");
         }
+        if (Char_control.collided_fire == true)//불켜진 상태에서 동물이랑 부딪쳤으면
+        {
+            decreaseHealthWithDec(10f);//인자 10f만큼 체력을 감소시킨다
+            Char_control.collided_fire = false;
+        }
     }
 
     void decreaseHealth()

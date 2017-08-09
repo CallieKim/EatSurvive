@@ -26,7 +26,8 @@ public class Char_control : MonoBehaviour {
     public Image meatBar;  //Tells Unity that the gameObject is a UI Image
     public float meatFillAmount; //Fill Amount for UI Image
 
-    public static bool collided = false;//부딪혔는지 아닌지
+    public static bool collided = false;//불안킨 상태로 부딪혔는지 아닌지
+    public static bool collided_fire = false;//불킨 상태로 부딪혔는지 아닌지
     public bool tree_collided = false;//나무랑 부딪혔는지 아닌지 판단하는 변수
     public bool meat_collided = false;//고기랑 부딪혔는지 아닌지 판단하는 변수
     public Collider2D hitCollider;
@@ -81,7 +82,7 @@ public class Char_control : MonoBehaviour {
             targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             //Debug.Log("targetpos is " + targetPosition);
             //hitCollider = Physics2D.OverlapPoint(targetPosition);
-            clicked = true;//클릭했으므로 true로 설정
+            //clicked = true;//클릭했으므로 true로 설정
                            //MovementType = MovementState.walking;
                            //Debug.Log("target position is x: " + targetPosition.x + ", y: " + targetPosition.y);
 
@@ -186,9 +187,17 @@ public class Char_control : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Animal")
+        if (other.tag == "Animal")//불 안켜진 상태에서 동물과 부딪혔다면
         {
-            collided = true;//부딪힌게 true
+            //Debug.Log("animal collided with player");
+            if(!anim.GetBool("is_onFire"))//불안켜진 상태에서 부딪혔다면
+            {
+                Debug.Log("collided without fire");
+                collided = true;//부딪힌게 true, 체력게이지가 10f만큼 닳는다
+            }else if(anim.GetBool("is_onFire"))//불킨 상태에서 부딪혔다면
+            {
+                collided_fire = true;//불켜진 상태로 부딪힌게 true, 장작게이지가 10f만큼 닳는다
+            }
         }
         else if (other.tag == "Tree")//나무랑 부딪혔으면
         {

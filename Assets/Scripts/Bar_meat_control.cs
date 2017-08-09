@@ -28,7 +28,7 @@ public class Bar_meat_control : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        if (Char_control.collided == true)//동물이랑 부딪쳤으면
+        if (Char_control.collided == true)//불안켜진 상태에서 동물이랑 부딪쳤으면
         {
             decreaseHealthWithDec(10f);//인자 10f만큼 체력을 감소시킨다
             Char_control.collided = false;
