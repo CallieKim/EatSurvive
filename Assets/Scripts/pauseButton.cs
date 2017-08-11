@@ -20,7 +20,7 @@ public class pauseButton : MonoBehaviour {
         pauseUI.SetActive(false);
         //Debug.Log(pause);
         Time.timeScale = 1;//scene 로드될때 사물들이 움직이게 한다
-        clicked = false;
+        //clicked = false;
 		
 	}
 	
@@ -67,7 +67,7 @@ public class pauseButton : MonoBehaviour {
 
     public void mainMenu()//메인 메뉴로 돌아간다
     {
-
+        SceneManager.LoadScene("Start");
     }
     public void Restart()
     {

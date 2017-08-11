@@ -88,8 +88,11 @@
     <Compile Include="Assets\Scripts\cloud_move.cs" />
     <Compile Include="Assets\Scripts\DoubleClickListener.cs" />
     <Compile Include="Assets\Scripts\flint_skill.cs" />
+    <Compile Include="Assets\Scripts\MainMenu.cs" />
     <Compile Include="Assets\Scripts\meat_control.cs" />
     <Compile Include="Assets\Scripts\pauseButton.cs" />
+    <Compile Include="Assets\Scripts\Rabbit_move.cs" />
+    <Compile Include="Assets\Scripts\Score.cs" />
     <Compile Include="Assets\Scripts\trap_control.cs" />
     <Compile Include="Assets\Scripts\trap_skill.cs" />
     <Compile Include="Assets\Scripts\Tree_control.cs" />

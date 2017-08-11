@@ -32,7 +32,7 @@ public class Char_control : MonoBehaviour {
     public bool meat_collided = false;//고기랑 부딪혔는지 아닌지 판단하는 변수
     public Collider2D hitCollider;
 
-    bool clicked = false;//동물이랑 부딪혔는지 아닌지 판단하는 변수
+    bool clicked = false;//클릭해야만 움직인다
 
     Animator anim;//캐릭터의 animator
 
@@ -82,7 +82,7 @@ public class Char_control : MonoBehaviour {
             targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             //Debug.Log("targetpos is " + targetPosition);
             //hitCollider = Physics2D.OverlapPoint(targetPosition);
-            //clicked = true;//클릭했으므로 true로 설정
+            clicked = true;//클릭했으므로 true로 설정, 움직인다
                            //MovementType = MovementState.walking;
                            //Debug.Log("target position is x: " + targetPosition.x + ", y: " + targetPosition.y);
 
@@ -202,13 +202,13 @@ public class Char_control : MonoBehaviour {
         else if (other.tag == "Tree")//나무랑 부딪혔으면
         {
             //tree_collided = true;
-            Debug.Log("collided tree on char script");
+            //Debug.Log("collided tree on char script");
             other.GetComponent<Tree_control>().disappear();
         }
         
         else if(other.tag=="meat")//고기랑 부딪혔으면
         {
-            Debug.Log("meat collided");
+            //Debug.Log("meat collided");
             //meat_collided = true;
             //other.GetComponent<GameObject>().GetComponent<SpriteRenderer>().enabled = false;
             //GameObject.FindGameObjectWithTag("meat").GetComponent<SpriteRenderer>().enabled = false;
