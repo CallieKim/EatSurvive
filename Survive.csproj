@@ -93,9 +93,12 @@
     <Compile Include="Assets\Scripts\pauseButton.cs" />
     <Compile Include="Assets\Scripts\Rabbit_move.cs" />
     <Compile Include="Assets\Scripts\Score.cs" />
+    <Compile Include="Assets\Scripts\Squirrel_move.cs" />
     <Compile Include="Assets\Scripts\trap_control.cs" />
     <Compile Include="Assets\Scripts\trap_skill.cs" />
     <Compile Include="Assets\Scripts\Tree_control.cs" />
+    <Compile Include="Assets\Scripts\wildPig_move.cs" />
+    <Compile Include="Assets\Scripts\wildPig_track.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

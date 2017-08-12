@@ -35,6 +35,9 @@ public class Char_control : MonoBehaviour {
     bool clicked = false;//클릭해야만 움직인다
 
     Animator anim;//캐릭터의 animator
+    //public Sprite[] hurtSprites;
+    GameObject blood;
+    GameObject fracture;
 
     private DoubleClickListener dbl = new DoubleClickListener(); // (optionnal: pass a float as the delay)
 
@@ -47,6 +50,11 @@ public class Char_control : MonoBehaviour {
 
     private void Start()
     {
+        blood = GameObject.Find("abrasion_blood");//출혈 아이콘을 저장한다
+        blood.SetActive(false);
+        fracture = GameObject.Find("abrasion_fracture");//골절 아이콘을 저장한다
+        fracture.SetActive(false);
+        //hurtSprites = Resources.LoadAll<Sprite>("UI/abrasion");
         walk_speed = 2.0f;//플레이어 걷는 속도 설정한다
         run_speed = 5.0f;//플레이어 뛰는 속도 설정한다
         anim = gameObject.GetComponent<Animator>();
@@ -216,7 +224,24 @@ public class Char_control : MonoBehaviour {
             
             
         }
+        else if(other.tag=="enemy")//멧돼지랑 부딪치면
+        {
+            //Debug.Log("collided with pig");
+            getHurt();
+        }
         
+    }
+
+    void getHurt()//플레이어는 부상을 입는다
+    {
+    if(!blood.activeSelf)//출혈 걸리지 않았으면 출혈 먼저 걸린다
+        {
+            blood.SetActive(true);
+        }
+        else//출혈이 걸렸는데 또 다쳤으면 골절 걸린다
+        {
+            fracture.SetActive(true);
+        }
     }
 
     

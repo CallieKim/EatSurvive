@@ -11,6 +11,7 @@ public class Bar_fire_control : MonoBehaviour {
     public float dec_health;//불을 안 키고 있을때 감소될 수치
     public float dec_fire_health;//불을 키고 있을때 감소될 수치
     public float dec_delay = 2.0f;
+    public bool noFire;//장작 게이지가 0인지 아닌지 판단하는 변수
     GameObject player;
     //Char_control playerControl;
     Animator playerAnim;//player의 animator 
@@ -23,6 +24,7 @@ public class Bar_fire_control : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+        noFire = false;//장작 게이지는 0이 아니다
         cur_health = max_health;
         InvokeRepeating("decreaseHealth", 0.5f, dec_delay);//0.5초후에 깎이는데, dec_delay만큼 decreaseHealth함수를 반복한다
         dec_fire_health = dec_health + 0.4f;
@@ -34,6 +36,11 @@ public class Bar_fire_control : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+        if(noFire && cur_health>0)//장작 게이지가 0으로 판단했는데 게이지가 >0 이면 다시 줄어든다
+        {
+            InvokeRepeating("decreaseHealth", 0.1f, dec_delay);//0.1초후에 깎이는데, dec_delay만큼 decreaseHealth함수를 반복한다
+            noFire = false;
+        }
         if(playerAnim.GetBool("is_onFire"))//player의 animation이 불을 키고 있으면
         {
             dec_health = dec_fire_health;
@@ -43,6 +50,18 @@ public class Bar_fire_control : MonoBehaviour {
         {
             decreaseHealthWithDec(10f);//인자 10f만큼 체력을 감소시킨다
             Char_control.collided_fire = false;
+        }
+        if (cur_health < 0)//체력이 0이 될때
+        {
+            cur_health = 0f;
+            //Debug.Log("player dead");
+            CancelInvoke("decreaseHealth");//체력이 감소되는 함수를 취소하고
+            noFire = true;//장작 게이지가 0이다
+            //player.GetComponent<Char_control>().MovementType = Char_control.MovementState.dead;//캐릭터 상태를 죽은 상태로 바꾼다
+        }
+        else if (cur_health > 100)//최대 체력을 100으로 고정시킨다
+        {
+            cur_health = 100;
         }
     }
 

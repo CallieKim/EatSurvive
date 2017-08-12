@@ -11,6 +11,11 @@ TagManager:
   - Trap
   - meat
   - wood
+  - score
+  - acorn
+  - wildPig_sight
+  - enemy
+  - abrasion
   layers:
   - Default
   - TransparentFX

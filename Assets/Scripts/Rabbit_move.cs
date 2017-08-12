@@ -10,6 +10,8 @@ public class Rabbit_move : MonoBehaviour {
     public bool trapSense;//함정을 감지하는지 판단하는 변수
     public bool collided_player;//플레이어와 부딪혔는지 아닌지 판단하는 변수
     private DoubleClickListener dbl;// = new DoubleClickListener(); // (optionnal: pass a float as the delay)
+    Score scoreScript;//Score script를 저장하는 변수이다
+    public int rabbitScore;//토끼의 점수
 
     public enum MovementState
     {
@@ -48,7 +50,8 @@ public class Rabbit_move : MonoBehaviour {
         collided_player = false;
         speed_attacked = speed * 0.1f;
         dbl = gameObject.AddComponent<DoubleClickListener>();
-
+        scoreScript = GameObject.FindGameObjectWithTag("score").GetComponent<Score>();
+        rabbitScore = 50;
     }
 
     // Update is called once per frame
@@ -165,7 +168,7 @@ public class Rabbit_move : MonoBehaviour {
         }
     }
 
-    IEnumerator Dead()//죽었을때 실행된다
+    IEnumerator Dead()//죽었을때 실행된다 + 점수도 추가된다
     {
         while (true)
         {
@@ -179,6 +182,7 @@ public class Rabbit_move : MonoBehaviour {
                 Instantiate(meatOriginal, new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity);//고기를 그 자리에서 한번만 생성한다
                 madeMeat = true;//고기를 생성했다
             }
+            scoreScript.ScoreUp(rabbitScore);
             gameObject.SetActive(false);//사라진다
         }
     }
@@ -199,7 +203,7 @@ public class Rabbit_move : MonoBehaviour {
             // col.GetComponent<trap_control>().disappear();//함정은 사라진다
             //col.gameObject.SetActive(false);//부딪힌 함정만 사라진다
             gameObject.SetActive(false);//오소리는 사라진다
-            col.GetComponent<trap_control>().Change();//부딪힌 함정의 모습이 바뀐다
+            col.GetComponent<trap_control>().Change(rabbitScore);//부딪힌 함정의 모습이 바뀐다
                                                       //MovementType = MovementState.dead;
                                                       //col.GetComponent<trap_control>().disappear();//함정은 사라진다
                                                       //MovementType = MovementState.dead;

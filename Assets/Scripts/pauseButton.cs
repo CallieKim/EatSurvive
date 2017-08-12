@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class pauseButton : MonoBehaviour {
     public bool pause;
     public GameObject pauseUI;
+    public GameObject gameOverUI;
     public GameObject player;
     public GameObject button;
     //public static bool clicked;
@@ -15,6 +16,8 @@ public class pauseButton : MonoBehaviour {
 	void Start () {
         pause = false;
         pauseUI = GameObject.Find("pauseMenu");
+        gameOverUI = GameObject.Find("gameOverMenu");
+        gameOverUI.SetActive(false);
         player = GameObject.FindGameObjectWithTag("Player");
         button = GameObject.Find("pauseButton");
         pauseUI.SetActive(false);
@@ -76,5 +79,11 @@ public class pauseButton : MonoBehaviour {
         //pause = false;
         int scene = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(scene, LoadSceneMode.Single);
+    }
+
+    public void deadMenu()//플레이어가 죽었을때 gameOverMenu가 보이게 한다
+    {
+        //Debug.Log("deadmenu");
+        gameOverUI.SetActive(true);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Badger_move : MonoBehaviour {
     public GameObject meatOriginal;//복사대상이 될 고기
@@ -10,6 +11,9 @@ public class Badger_move : MonoBehaviour {
     public bool collided_player;//플레이어와 부딪혔는지 아닌지 판단하는 변수
     public int amountOfClicks;
     private DoubleClickListener dbl;// = new DoubleClickListener(); // (optionnal: pass a float as the delay)
+    Score scoreScript;//점수 script를 저장하는 변수
+    public int badgerScore;//오소리의 점수
+    
 
     public enum MovementState
     {
@@ -48,6 +52,8 @@ public class Badger_move : MonoBehaviour {
         amountOfClicks = 0;
         speed_attacked=speed*0.1f;
         dbl = gameObject.AddComponent<DoubleClickListener>();
+        scoreScript = GameObject.FindGameObjectWithTag("score").GetComponent<Score>();
+        badgerScore = 100;
         
     }
 
@@ -74,6 +80,8 @@ public class Badger_move : MonoBehaviour {
             anim.SetBool("is_idle", false);
             anim.SetBool("is_moving", false);
             anim.SetBool("is_onFire", false);
+            //scoreScript.ScoreUp(100);//점수가 추가된다
+            
             /*
             if (!madeMeat)//고기를 아직 생성하지 않았다면
             {
@@ -160,7 +168,7 @@ public class Badger_move : MonoBehaviour {
         }
     }
 
-    IEnumerator Dead()//죽었을때 실행된다
+    IEnumerator Dead()//죽었을때 실행된다 + 점수도 추가된다
     {
         while(true)
         {
@@ -174,6 +182,7 @@ public class Badger_move : MonoBehaviour {
             }
             //wayP = false;//움직이지 않는다
             //Destroy(WP);
+            scoreScript.ScoreUp(badgerScore);//점수가 추가된다
             gameObject.SetActive(false);//사라진다
         }
     }
@@ -194,7 +203,7 @@ public class Badger_move : MonoBehaviour {
                // col.GetComponent<trap_control>().disappear();//함정은 사라진다
                 //col.gameObject.SetActive(false);//부딪힌 함정만 사라진다
             gameObject.SetActive(false);//오소리는 사라진다
-            col.GetComponent<trap_control>().Change();//부딪힌 함정의 모습이 바뀐다
+            col.GetComponent<trap_control>().Change(badgerScore);//부딪힌 함정의 모습이 바뀐다
                 //MovementType = MovementState.dead;
             //col.GetComponent<trap_control>().disappear();//함정은 사라진다
             //MovementType = MovementState.dead;

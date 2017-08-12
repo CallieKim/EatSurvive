@@ -13,6 +13,7 @@ public class Bar_meat_control : MonoBehaviour {
     float walk_dec_health;
     public float dec_delay = 2.0f;
     GameObject player;
+    GameObject gamecontroller;
 
 
     // Use this for initialization
@@ -23,6 +24,7 @@ public class Bar_meat_control : MonoBehaviour {
         run_dec_health = dec_health + 0.5f;
         InvokeRepeating("decreaseHealth", 0.5f, dec_delay);//0.5초후에 깎이는데, dec_delay만큼 decreaseHealth함수를 반복한다
         player = GameObject.FindGameObjectWithTag("Player");
+        gamecontroller = GameObject.Find("GameController");
     }
 
     // Update is called once per frame
@@ -54,6 +56,7 @@ public class Bar_meat_control : MonoBehaviour {
             Debug.Log("player dead");
             CancelInvoke("decreaseHealth");//체력이 감소되는 함수를 취소하고
             player.GetComponent<Char_control>().MovementType = Char_control.MovementState.dead;//캐릭터 상태를 죽은 상태로 바꾼다
+            gamecontroller.GetComponent<pauseButton>().deadMenu();//gameover menu가 보이게 한다
         }
         else if(cur_health>100)//최대 체력을 100으로 고정시킨다
         {
