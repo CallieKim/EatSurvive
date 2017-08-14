@@ -38,6 +38,7 @@ public class Char_control : MonoBehaviour {
     //public Sprite[] hurtSprites;
     GameObject blood;
     GameObject fracture;
+    GameObject gamecontrol;//정지 메뉴를 보이기 위해서
 
     private DoubleClickListener dbl = new DoubleClickListener(); // (optionnal: pass a float as the delay)
 
@@ -46,6 +47,7 @@ public class Char_control : MonoBehaviour {
 
     flint_skill flintSkill;
     trap_skill trapSkill;
+    buff_skill buffSkill;
 
 
     private void Start()
@@ -60,6 +62,8 @@ public class Char_control : MonoBehaviour {
         anim = gameObject.GetComponent<Animator>();
         flintSkill = GameObject.Find("skillButton_flint").GetComponent<flint_skill>();
         trapSkill = GameObject.Find("skillButton_trap").GetComponent<trap_skill>();
+        buffSkill = GameObject.FindGameObjectWithTag("GameController").GetComponent<buff_skill>();
+        gamecontrol = GameObject.FindGameObjectWithTag("GameController");
     }
 
     void range_restrict()//클릭한 위치가 화면 위치를 벗어나는것을 막는 함수
@@ -85,9 +89,11 @@ public class Char_control : MonoBehaviour {
     void Update()
     {
         //마우스로 클릭한 위치 받는다
-        if (Input.GetKeyDown(KeyCode.Mouse0) && !flintSkill.flint_click && !trapSkill.trap_click)//한번 클릭했으면 그리고 스킬들을 누른 상태가 아니라면
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !flintSkill.flint_click && !trapSkill.trap_click && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())//한번 클릭했으면 그리고 스킬들을 누른 상태가 아니라면
         {
+            
             targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            //Debug.Log(targetPosition);
             //Debug.Log("targetpos is " + targetPosition);
             //hitCollider = Physics2D.OverlapPoint(targetPosition);
             clicked = true;//클릭했으므로 true로 설정, 움직인다
@@ -112,15 +118,40 @@ public class Char_control : MonoBehaviour {
             }
             
         }
-        else if(flintSkill.flint_click)//flint 스킬 누른상태라면
+        else if(flintSkill.fireOn)//flint 스킬 누른상태라면
         {
             anim.SetBool("is_onFire", true);//불에 타는 상태로 바뀐다
             flintSkill.flint_click = false;//다시 스킬 눌렀는지 확인하는 변수를 false로 설정한다->그래야 움직일 수 있음
         }
-        else if(trapSkill.trap_click)//trap 스킬을 누른상태라면 trap이 생성된다
+        else if(!flintSkill.fireOn)//flint 스킬을 끄려고 눌렀다면
+        {
+            anim.SetBool("is_onFire", false);
+            flintSkill.flint_click = false;//다시 스킬 눌렀는지 확인하는 변수를 false로 설정한다->그래야 움직일 수 있음
+        }
+        
+        if(buffSkill.skill_buff)//버프 스킬을 눌렀으면 상처가 회복된다
+        {
+            //Debug.Log(buffSkill.skill_buff);
+            blood.SetActive(false);
+            fracture.SetActive(false);
+            buffSkill.skill_buff = false;//다시 스킬 초기화한다
+            
+        }
+        
+        if(trapSkill.trap_click)//trap 스킬을 누른상태라면 trap이 생성된다
         {
             //Debug.Log("should make trap");
             trapSkill.trap_click = false;//다시 스킬 눌렀는지 확인하는 변수를 false로 설정한다->그래야 움직일 수 있음
+        }
+        if(fracture.activeSelf)//골절이 생겼으면 걷는 속도가 느려진다
+        {
+            walk_speed = 1.0f;
+            run_speed = 3.0f;
+        }
+        else if(!fracture.activeSelf)//골절 안 생겼으면 원래 속도로 움직인다
+        {
+            walk_speed = 2.0f;
+            run_speed = 5.0f;
         }
 
         //현재위치에 따른 상대적인 위치를 구한다 (클릭한 위치-현재 위치)
@@ -162,6 +193,12 @@ public class Char_control : MonoBehaviour {
         if (gameObject.transform.position.x == targetPosition.x && gameObject.transform.position.y == targetPosition.y)//클릭한 곳에 도착했으면 평상시 상태로 바뀐다
         {
             MovementType = MovementState.idle;
+        }
+
+        if(blood.activeSelf && fracture.activeSelf)//부상 2개 다 생겼으면 죽는다
+        {
+            MovementType = MovementState.dead;
+            gamecontrol.GetComponent<pauseButton>().deadMenu();//죽었을때 생기는 메뉴가 보인다
         }
 
 
@@ -232,15 +269,35 @@ public class Char_control : MonoBehaviour {
         
     }
 
-    void getHurt()//플레이어는 부상을 입는다
+    void getHurt()//플레이어는 부상을 입는다 확률 2분의 1로!!
     {
-    if(!blood.activeSelf)//출혈 걸리지 않았으면 출혈 먼저 걸린다
+        bool bleeding = false;
+        bool fractured = false;
+    if(blood.activeSelf)//출혈 걸렸으면
+        {
+            // blood.SetActive(true);
+            bleeding = true;
+        }
+        if(fracture.activeSelf)//골절 걸렸으면
+        {
+            //fracture.SetActive(true);
+            fractured = true;
+        }
+    if(Random.Range(1,100)<=50 && !bleeding && !fractured)//2분의 1 확률로 상처 없었는데 걸리면 출혈 발생
         {
             blood.SetActive(true);
         }
-        else//출혈이 걸렸는데 또 다쳤으면 골절 걸린다
+        else if(Random.Range(1, 100) > 50 && !fractured && !bleeding)//2분의1 확률로 상처 안생겼는데 걸리면 골절 발생
         {
             fracture.SetActive(true);
+        }
+    else if(bleeding)//출혈 걸렸는데 또 부딪치면 골절 발생
+        {
+            fracture.SetActive(true);
+        }
+    else if(fractured)//골절 걸렸는데 또 부딪치면 출혈 발생
+        {
+            blood.SetActive(true);
         }
     }
 

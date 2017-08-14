@@ -13,7 +13,7 @@ ff05dcdf90651c3d98a9cad3df5e471e UnityEngine.Timeline.dll:UnityEngine.Timeline.C
 5667fb372c2b292ccdec2a31aaac98fa UnityEngine.Timeline.dll:UnityEngine.Timeline.GroupTrack
 5667fb372c2b292ccdec2a31aaac98fa UnityEngine.Timeline.dll:UnityEngine.Timeline.PlayableTrack
 c24a21b131bfa67be1162db2cba4b52b UnityEngine.Timeline.dll:UnityEngine.Timeline.TimelineAsset
-7978eed1d7d1e3f478855a9ebec562da Assembly-CSharp.dll:.flint_skill
+d6bc88abf788fd0d06bce51cb198fc6f Assembly-CSharp.dll:.flint_skill
 a35dc9cca2faebc5f5f1aeb9e8e47bbe UnityEngine.UI.dll:UnityEngine.UI.AspectRatioFitter
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.UI.dll:UnityEngine.EventSystems.BaseInput
 49cd62a578efc0a599b810a2b66cd49c UnityEngine.UI.dll:UnityEngine.UI.Button
@@ -114,8 +114,9 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.VR.WSA.Spa
 45f3431f0103c41611e8d4eec3d439df UnityEngine.HoloLens.dll:UnityEngine.VR.WSA.SpatialMappingRenderer
 94e7a7835c25b1367c128cfc460a0326 Assembly-CSharp.dll:.Score
 c99184f9e99056736eb12e5105cae33f Assembly-CSharp.dll:.Badger_move
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.SelectMenu
 948209b57fdb6a7fc4add92b72068195 Assembly-CSharp.dll:.Squirrel_move
-46bd549010b781da315193b2c57ca5c4 Assembly-CSharp.dll:.trap_control
+00860bcd47ec97f81bdc2d3f993306af Assembly-CSharp.dll:.trap_control
 f6b08f105af5aac875a961c84b4ac79a Assembly-CSharp.dll:.Bar_fire_control
 a8e3964a4bbd2efc6a8593bfc2cf2f50 Assembly-CSharp.dll:.Bar_meat_control
 a8e3964a4bbd2efc6a8593bfc2cf2f50 Assembly-CSharp.dll:.Bar_control

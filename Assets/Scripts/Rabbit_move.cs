@@ -12,6 +12,7 @@ public class Rabbit_move : MonoBehaviour {
     private DoubleClickListener dbl;// = new DoubleClickListener(); // (optionnal: pass a float as the delay)
     Score scoreScript;//Score script를 저장하는 변수이다
     public int rabbitScore;//토끼의 점수
+    GameObject barGage;
 
     public enum MovementState
     {
@@ -51,7 +52,8 @@ public class Rabbit_move : MonoBehaviour {
         speed_attacked = speed * 0.1f;
         dbl = gameObject.AddComponent<DoubleClickListener>();
         scoreScript = GameObject.FindGameObjectWithTag("score").GetComponent<Score>();
-        rabbitScore = 50;
+        rabbitScore = 100;
+        barGage = GameObject.Find("meatFill");
     }
 
     // Update is called once per frame
@@ -168,20 +170,23 @@ public class Rabbit_move : MonoBehaviour {
         }
     }
 
-    IEnumerator Dead()//죽었을때 실행된다 + 점수도 추가된다
+    IEnumerator Dead()//죽었을때 실행된다 + 점수도 추가된다 이때 때려서 죽인거니까 고기는 생성되지 않는다
     {
         while (true)
         {
             wayP = false;//움직이지 않는다
             Destroy(WP);
-            yield return new WaitForSeconds(0.7f);//0.7초동안 기다린다
+            yield return new WaitForSeconds(1.5f);//일정시간동안 시체가 보인다
                                                   //wayP = false;//움직이지 않는다
                                                   //Destroy(WP);
-            if (!madeMeat)//고기를 아직 생성하지 않았다면
-            {
-                Instantiate(meatOriginal, new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity);//고기를 그 자리에서 한번만 생성한다
-                madeMeat = true;//고기를 생성했다
-            }
+                                                  /*
+                                                  if (!madeMeat)//고기를 아직 생성하지 않았다면
+                                                  {
+                                                      Instantiate(meatOriginal, new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity);//고기를 그 자리에서 한번만 생성한다
+                                                      madeMeat = true;//고기를 생성했다
+                                                  }
+                                                  */
+            barGage.GetComponent<Bar_meat_control>().increaseHealth(10f);//체력 게이지가 10만큼 추가된다
             scoreScript.ScoreUp(rabbitScore);
             gameObject.SetActive(false);//사라진다
         }
@@ -196,7 +201,7 @@ public class Rabbit_move : MonoBehaviour {
             wayP = false;
             MovementType = MovementState.walking;
         }
-        else if (col.tag == "Trap")//동물이 함정이랑 부딪히면 발생
+        else if (col.tag == "Trap" && !col.GetComponent<trap_control>().trapuUsed)//동물이 함정이랑 부딪히면 발생 이때 함정은 한번도 쓰이지 않았다.
         {
             //col.GetComponent<SpriteRenderer>().enabled = false;
             //GameObject.FindGameObjectWithTag("Trap").GetComponent<SpriteRenderer>().enabled = false;

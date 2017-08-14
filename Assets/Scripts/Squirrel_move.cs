@@ -19,12 +19,15 @@ public class Squirrel_move : MonoBehaviour {
 
     float min_distance = -6.0f;
     float max_distance = 6.0f;
-
+    float lastUpdate;
     Animator anim;//다람쥐의 animator
+    GameObject acornOriginal;
+    int acornSize = 4;
+    public Queue<GameObject> acorns = new Queue<GameObject>();//acorn 큐, 다람쥐는 도토리를 4개까지 심을 수 있다
 
 
-    // Use this for initialization
-    void Awake()
+// Use this for initialization
+void Awake()
     {
         anim = GetComponent<Animator>();
         anim.speed = 0.7f;
@@ -34,6 +37,19 @@ public class Squirrel_move : MonoBehaviour {
     {
         speed = 2f;
         createWaypoint();
+        acornOriginal = GameObject.FindGameObjectWithTag("acorn");//acorn 원본, 복사할 대상
+
+        acorns.Enqueue(acornOriginal);
+        acornOriginal.SetActive(false);
+
+        for (int i = 0; i < acornSize; i++)//acorn 큐를 초기화 시킨다
+        {
+            GameObject acorn = (GameObject)Instantiate(acornOriginal);
+            //setPos(obj_fur);
+            //obj_fur.transform.parent = gameObject.transform;
+            acorns.Enqueue(acorn);
+            acorn.SetActive(false);
+        }
     }
 
     // Update is called once per frame
@@ -48,14 +64,30 @@ public class Squirrel_move : MonoBehaviour {
                 createWaypoint();
             }
             */
-            createWaypoint();
+            if (Time.time - lastUpdate >= 6f && acornSize > 0)//6초이상 움직였으면 도토리를 심는다, 도토리가 존재하면
+            {
+                setPos(acorns.Dequeue());//그 자리에서 도토리를 심는다
+                acornSize--;//도토리 개수는 준다
+                lastUpdate = Time.time;
+
+            }
+            createWaypoint();//목표지점을 생성한다
         }
+        /*
         else if (MovementType == MovementState.digging)//도토리 심고 있을때, 잠시 멈춘다
         {
+            //createWaypoint();
+            if (Time.time - lastUpdate >= 6f && acornSize>0)//6초이상 움직였으면 도토리를 심는다, 도토리가 존재하면
+            {
+                acorns.Dequeue().SetActive(true);//그 자리에서 도토리를 심는다
+                acornSize--;//도토리 개수는 준다
+                lastUpdate = Time.time;
+
+            }
             createWaypoint();
             //anim.SetBool("is_moving", false);
         }
-
+        */
 
         if (wayP)//목표지점이 존재하면 그쪽으로 이동한다
         {
@@ -112,7 +144,7 @@ public class Squirrel_move : MonoBehaviour {
                 int num = Random.Range(0, 2);//0과1 중 고른다 idle, walking
                 if (num == 0)
                 {
-                    MovementType = MovementState.idle;
+                    MovementType = MovementState.digging;
                 }
                 else if (num == 1)
                 {
@@ -132,5 +164,12 @@ public class Squirrel_move : MonoBehaviour {
             wayP = false;
             MovementType = MovementState.walking;
         }
+    }
+
+    void setPos(GameObject obj)//도토리의 위치를 정하고 게임에 나타나게 한다
+    {
+        obj.transform.position = gameObject.transform.position;
+        obj.SetActive(true);
+        //trap_click = false;
     }
 }

@@ -47,11 +47,13 @@ public class trap_skill : MonoBehaviour {
 
     private void OnMouseDown()//trap 버튼을 클릭하면
     {
+        trap_click = true;
         Debug.Log("trap skill clicked");
         trapSize--;
         bar_meat.decreaseHealthWithDec(10);//체력이 일정 수준만큼 감소된다
-        trap_click = true;
+        //trap_click = true;
         setPos(traps.Dequeue());
+        //trap_click = false;
     }
 
     //함정의 위치를 정해주는 함수
@@ -59,6 +61,7 @@ public class trap_skill : MonoBehaviour {
     {
         obj.transform.position = player.transform.position;
         obj.SetActive(true);
+        //trap_click = false;
     }
     
     //함정을 다시 큐에 넣는다

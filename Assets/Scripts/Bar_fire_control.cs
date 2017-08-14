@@ -15,6 +15,7 @@ public class Bar_fire_control : MonoBehaviour {
     GameObject player;
     //Char_control playerControl;
     Animator playerAnim;//player의 animator 
+    flint_skill flintSkill;
 
     private void Awake()//해상도 조절 함수
     {
@@ -31,6 +32,7 @@ public class Bar_fire_control : MonoBehaviour {
         player = GameObject.FindGameObjectWithTag("Player");
         //playerControl = player.GetComponent<Char_control>();
         playerAnim = player.GetComponent<Animator>();
+        flintSkill=GameObject.Find("skillButton_flint").GetComponent<flint_skill>();
     }
 
     // Update is called once per frame
@@ -40,11 +42,16 @@ public class Bar_fire_control : MonoBehaviour {
         {
             InvokeRepeating("decreaseHealth", 0.1f, dec_delay);//0.1초후에 깎이는데, dec_delay만큼 decreaseHealth함수를 반복한다
             noFire = false;
+            //playerAnim.SetBool("is_onFire", true);
         }
         if(playerAnim.GetBool("is_onFire"))//player의 animation이 불을 키고 있으면
         {
             dec_health = dec_fire_health;
             //Debug.Log("dec_fire_health");
+        }
+        else if(!playerAnim.GetBool("is_onFire"))//player의 animation이 불을 끄고 있으면
+        {
+            dec_health = dec_fire_health - 0.4f;
         }
         if (Char_control.collided_fire == true)//불켜진 상태에서 동물이랑 부딪쳤으면
         {
@@ -57,6 +64,9 @@ public class Bar_fire_control : MonoBehaviour {
             //Debug.Log("player dead");
             CancelInvoke("decreaseHealth");//체력이 감소되는 함수를 취소하고
             noFire = true;//장작 게이지가 0이다
+            flintSkill.fireOn = false;//불켜지는 스킬을 끈다
+            //playerAnim.SetBool("is_onFire", false);//불켜진 상태로 존재하지 못한다
+            //Debug.Log("there is no fire"+playerAnim.GetBool("is_onFire"));
             //player.GetComponent<Char_control>().MovementType = Char_control.MovementState.dead;//캐릭터 상태를 죽은 상태로 바꾼다
         }
         else if (cur_health > 100)//최대 체력을 100으로 고정시킨다

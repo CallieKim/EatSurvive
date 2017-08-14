@@ -22,7 +22,8 @@ public class MainMenu : MonoBehaviour {
             //pause = false;
             //int scene = SceneManager.GetActiveScene().buildIndex;
             //SceneManager.LoadScene(scene, LoadSceneMode.Single);
-            SceneManager.LoadScene("Field");
+            //SceneManager.LoadScene("Field");
+            SceneManager.LoadScene("selectCharacter");
     }
 
     public void GameQuit()

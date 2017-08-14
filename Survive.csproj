@@ -78,11 +78,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\acornToTree.cs" />
     <Compile Include="Assets\Scripts\Badger_control.cs" />
     <Compile Include="Assets\Scripts\Badger_move.cs" />
     <Compile Include="Assets\Scripts\Bar_control.cs" />
     <Compile Include="Assets\Scripts\Bar_fire_control.cs" />
     <Compile Include="Assets\Scripts\Bar_meat_control.cs" />
+    <Compile Include="Assets\Scripts\buff_skill.cs" />
     <Compile Include="Assets\Scripts\Camera_control.cs" />
     <Compile Include="Assets\Scripts\Char_control.cs" />
     <Compile Include="Assets\Scripts\cloud_move.cs" />
@@ -93,6 +95,7 @@
     <Compile Include="Assets\Scripts\pauseButton.cs" />
     <Compile Include="Assets\Scripts\Rabbit_move.cs" />
     <Compile Include="Assets\Scripts\Score.cs" />
+    <Compile Include="Assets\Scripts\SelectMenu.cs" />
     <Compile Include="Assets\Scripts\Squirrel_move.cs" />
     <Compile Include="Assets\Scripts\trap_control.cs" />
     <Compile Include="Assets\Scripts\trap_skill.cs" />
