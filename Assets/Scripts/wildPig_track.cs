@@ -5,16 +5,18 @@ using UnityEngine;
 public class wildPig_track : MonoBehaviour {
 
     public bool track;//플레이어가 시야에 들었는지 판단하는 변수
-
+    public bool Flip;
 	// Use this for initialization
 	void Start () {
         track = false;
+        Flip = GetComponent<SpriteRenderer>().flipX;
+        
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+        Flip = GameObject.Find("WildPig").GetComponentInParent<SpriteRenderer>().flipX;
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

@@ -28,7 +28,7 @@ public class Bar_meat_control : MonoBehaviour {
         InvokeRepeating("decreaseHealth", 0.5f, dec_delay);//0.5초후에 깎이는데, dec_delay만큼 decreaseHealth함수를 반복한다
         player = GameObject.FindGameObjectWithTag("Player");
         gamecontroller = GameObject.Find("GameController");
-        blood = GameObject.Find("abrasion_blood");
+        //blood = GameObject.Find("abrasion_blood");
     }
 
     // Update is called once per frame
@@ -54,6 +54,7 @@ public class Bar_meat_control : MonoBehaviour {
             //Debug.Log("idle_dec_health");
             dec_health = walk_dec_health;//체력이 감소되는 양을 걸을때 감소되는 양으로 바꾼다
         }
+        /*
         if(blood.activeSelf)//출혈이 생겼으면 체력 감소 속도가 증가한다
         {
             dec_health = dec_health_blood;
@@ -62,7 +63,17 @@ public class Bar_meat_control : MonoBehaviour {
         {
             dec_health = walk_dec_health;//출혈 안 생겼으면 처음 원래 속도로 돌아온다
         }
-        if(cur_health<0)//체력이 0이 될때
+        */
+        if (bloodActive.alive)//출혈이 생겼으면 체력 감소 속도가 증가한다
+        {
+            dec_health = dec_health_blood;
+        }
+        else if (!bloodActive.alive)//출혈이 안 생겼으면 다시 원래대로 돌아간다
+        {
+            //Debug.Log("healthy");
+            dec_health = walk_dec_health;
+        }
+        if (cur_health<0)//체력이 0이 될때
         {
             cur_health = 0f;
             Debug.Log("player dead");

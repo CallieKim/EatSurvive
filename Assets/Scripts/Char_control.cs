@@ -132,6 +132,7 @@ public class Char_control : MonoBehaviour {
         if(buffSkill.skill_buff)//버프 스킬을 눌렀으면 상처가 회복된다
         {
             //Debug.Log(buffSkill.skill_buff);
+            bloodActive.alive = false;//출혈이 사라졌으니 false로 설정한다
             blood.SetActive(false);
             fracture.SetActive(false);
             buffSkill.skill_buff = false;//다시 스킬 초기화한다
@@ -237,7 +238,7 @@ public class Char_control : MonoBehaviour {
             //Debug.Log("animal collided with player");
             if(!anim.GetBool("is_onFire"))//불안켜진 상태에서 부딪혔다면
             {
-                Debug.Log("collided without fire");
+                //Debug.Log("collided without fire");
                 collided = true;//부딪힌게 true, 체력게이지가 10f만큼 닳는다
             }else if(anim.GetBool("is_onFire"))//불킨 상태에서 부딪혔다면
             {
@@ -265,6 +266,11 @@ public class Char_control : MonoBehaviour {
         {
             //Debug.Log("collided with pig");
             getHurt();
+        }
+        else if(other.tag=="potato")//감자랑 부딪쳤으면
+        {
+            Debug.Log("colldied with potato");
+            other.GetComponent<potato_control>().disappear();
         }
         
     }

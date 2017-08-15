@@ -188,6 +188,7 @@ public class Rabbit_move : MonoBehaviour {
                                                   */
             barGage.GetComponent<Bar_meat_control>().increaseHealth(10f);//체력 게이지가 10만큼 추가된다
             scoreScript.ScoreUp(rabbitScore);
+            scoreScript.rabbitKill++;//죽인 토끼수가 증가한다
             gameObject.SetActive(false);//사라진다
         }
     }

@@ -38,10 +38,13 @@ public class Tree_control : MonoBehaviour {
 
     public void disappear()//다른 script에서 부르면 이 script를 붙인 gameobject가 사라진다
     {
-        if(tree_col)//나무를 클릭했으면
+        if(tree_col && gameObject.GetComponent<acornToTree>().clickable)//나무를 클릭했으면, 그리고 다 큰 상태면
         {
+            tree_col = false;
+            Squirrel_move.trees.Enqueue(gameObject);//큐에 넣는다
+            gameObject.GetComponent<acornToTree>().Start();
             gameObject.SetActive(false);//나무는 사라져도 된다
-            bar_fire.increaseHealth(10f);//장작 게이지가 10f만큼 증가한다
+            bar_fire.increaseHealth(20f);//장작 게이지가 20f만큼 증가한다
         }
         //gameObject.SetActive(false);
     }

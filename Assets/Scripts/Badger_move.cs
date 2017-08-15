@@ -187,6 +187,7 @@ public class Badger_move : MonoBehaviour {
             //Destroy(WP);
             barGage.GetComponent<Bar_meat_control>().increaseHealth(10f);//체력게이지가 10만큼 추가된다
             scoreScript.ScoreUp(badgerScore);//점수가 추가된다
+            scoreScript.badgerKill++;//죽인 오소리 수가 증가한다
             gameObject.SetActive(false);//사라진다
         }
     }

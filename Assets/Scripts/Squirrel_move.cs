@@ -22,8 +22,8 @@ public class Squirrel_move : MonoBehaviour {
     float lastUpdate;
     Animator anim;//다람쥐의 animator
     GameObject acornOriginal;
-    int acornSize = 4;
-    public Queue<GameObject> acorns = new Queue<GameObject>();//acorn 큐, 다람쥐는 도토리를 4개까지 심을 수 있다
+    int treeSize;
+    public static Queue<GameObject> trees = new Queue<GameObject>();//acorn 큐, 다람쥐는 도토리를 4개까지 심을 수 있다
 
 
 // Use this for initialization
@@ -35,23 +35,41 @@ void Awake()
 
     void Start()
     {
+        //treeSize = 4;
         speed = 2f;
         createWaypoint();
-        acornOriginal = GameObject.FindGameObjectWithTag("acorn");//acorn 원본, 복사할 대상
+        treeSize = 4;
+        acornOriginal = GameObject.FindGameObjectWithTag("Tree");//acorn 원본, 복사할 대상
 
-        acorns.Enqueue(acornOriginal);
+        trees.Enqueue(acornOriginal);
         acornOriginal.SetActive(false);
 
-        for (int i = 0; i < acornSize; i++)//acorn 큐를 초기화 시킨다
+        for (int i = 0; i < treeSize; i++)//acorn 큐를 초기화 시킨다
         {
-            GameObject acorn = (GameObject)Instantiate(acornOriginal);
+            GameObject tree = (GameObject)Instantiate(acornOriginal);
             //setPos(obj_fur);
             //obj_fur.transform.parent = gameObject.transform;
-            acorns.Enqueue(acorn);
-            acorn.SetActive(false);
+            trees.Enqueue(tree);
+            tree.SetActive(false);
         }
+        //TreeQueueStart();
     }
-
+    
+    public void TreeQueueStart()//다시 다람쥐가 나타날때 나무 큐는 4개 있어야한다
+    {
+        treeSize = 4;
+        /*
+        for (int i = 0; i < treeSize; i++)//acorn 큐를 초기화 시킨다
+        {
+            //GameObject tree = (GameObject)Instantiate(acornOriginal);
+            //setPos(obj_fur);
+            //obj_fur.transform.parent = gameObject.transform;
+            trees.Enqueue(tree);
+            tree.SetActive(false);
+        }
+        */
+    }
+    
     // Update is called once per frame
     void Update()
     {
@@ -64,10 +82,10 @@ void Awake()
                 createWaypoint();
             }
             */
-            if (Time.time - lastUpdate >= 6f && acornSize > 0)//6초이상 움직였으면 도토리를 심는다, 도토리가 존재하면
+            if (Time.time - lastUpdate >= 6f && treeSize > 0)//6초이상 움직였으면 도토리를 심는다, 도토리가 존재하면
             {
-                setPos(acorns.Dequeue());//그 자리에서 도토리를 심는다
-                acornSize--;//도토리 개수는 준다
+                setPos(trees.Dequeue());//그 자리에서 도토리를 심는다
+                treeSize--;//도토리 개수는 준다
                 lastUpdate = Time.time;
 
             }
@@ -92,6 +110,12 @@ void Awake()
         if (wayP)//목표지점이 존재하면 그쪽으로 이동한다
         {
             move();
+        }
+
+        if(treeSize==0 && GameObject.FindGameObjectWithTag("Tree")==null)//도토리가 더이상 없으면 사라진다 그리고 나무를 다 먹어야만 사라진다
+        {
+            Debug.Log("no tree");
+            gameObject.SetActive(false);
         }
 
     }
@@ -170,6 +194,7 @@ void Awake()
     {
         obj.transform.position = gameObject.transform.position;
         obj.SetActive(true);
+        obj.GetComponent<acornToTree>().Start();
         //trap_click = false;
     }
 }
