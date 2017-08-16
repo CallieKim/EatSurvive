@@ -114,7 +114,7 @@ void Awake()
 
         if(treeSize==0 && GameObject.FindGameObjectWithTag("Tree")==null)//도토리가 더이상 없으면 사라진다 그리고 나무를 다 먹어야만 사라진다
         {
-            Debug.Log("no tree");
+            //Debug.Log("no tree");
             gameObject.SetActive(false);
         }
 
@@ -192,8 +192,9 @@ void Awake()
 
     void setPos(GameObject obj)//도토리의 위치를 정하고 게임에 나타나게 한다
     {
-        obj.transform.position = gameObject.transform.position;
+        //obj.transform.position = gameObject.transform.position;
         obj.SetActive(true);
+        obj.transform.position = gameObject.transform.position;
         obj.GetComponent<acornToTree>().Start();
         //trap_click = false;
     }

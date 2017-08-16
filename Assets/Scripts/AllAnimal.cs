@@ -9,34 +9,42 @@ public class AllAnimal : MonoBehaviour {
     GameObject badgerOrigin;
 
     public static Queue<GameObject> rabbits = new Queue<GameObject>();//rabbit 큐, 토끼는 3마리까지
-    int rabbitSize=3;
+    public static int rabbitSize=3;
     public static Queue<GameObject> badgers = new Queue<GameObject>();//badger 큐, 오소리는 1마리가지
-    int badgerSize=2;
+    public static int badgerSize=2;
+
+    public bool rabbitRespawn;
+    public bool badgerRespawn;
 
     // Use this for initialization
     void Start () {
+        rabbitRespawn = false;
+        badgerRespawn = false;
         pig = GameObject.FindGameObjectWithTag("enemy");
         squirrel = GameObject.Find("squirrel");
         rabbitOrigin = GameObject.Find("rabbit");
-        rabbits.Enqueue(rabbitOrigin);
-        rabbitOrigin.SetActive(false);
+        //rabbits.Enqueue(rabbitOrigin);
+        //rabbitOrigin.SetActive(false);
         badgerOrigin = GameObject.Find("badger");
-        badgers.Enqueue(badgerOrigin);
-        badgerOrigin.SetActive(false);
+        //badgers.Enqueue(badgerOrigin);
+        //badgerOrigin.SetActive(false);
 
-        for (int i=0;i<rabbitSize;i++)//rabbit 큐를 초기화 한다
+        for (int i=0;i<3;i++)//rabbit 큐를 초기화 한다
         {
             GameObject rabbit = (GameObject)Instantiate(rabbitOrigin);
             rabbits.Enqueue(rabbit);
             rabbit.SetActive(true);
         }
-
-        for (int i = 0; i < badgerSize; i++)//badger 큐를 초기화 한다
+        rabbitOrigin.SetActive(false);
+        //rabbitSize = 0;
+        for (int i = 0; i < 2; i++)//badger 큐를 초기화 한다
         {
             GameObject badger = (GameObject)Instantiate(badgerOrigin);
-            rabbits.Enqueue(badger);
+            badgers.Enqueue(badger);
             badger.SetActive(true);
         }
+        badgerOrigin.SetActive(false);
+        //badgerSize = 0;
     }
 	
 	// Update is called once per frame
@@ -60,6 +68,54 @@ public class AllAnimal : MonoBehaviour {
 
         }
         */
+        /*
+        if(rabbits.Contains(GameObject.Find("rabbit")))
+        {
+            Debug.Log("respawn rabbit");
+            rabbits.Dequeue().SetActive(true);
+        }
+        */
+        if(rabbitSize==0)
+        {
+            rabbitRespawn = true;
+        }
+        if(badgerSize==0)
+        {
+            badgerRespawn = true;
+        }
+        if(rabbitRespawn)
+        {
+            rabbitRespawn = false;
+            for (int i = 0; i < 3; i++)//rabbit 큐를 초기화 한다
+            {
+                //GameObject rabbit = (GameObject)Instantiate(rabbitOrigin);
+                rabbits.Dequeue().SetActive(true);
+                
+            }
+            rabbitSize = 3;
+        }
+        
+        /*
+        if(rabbits.Peek()!=null)
+        {
+            rabbits.Dequeue().SetActive(true);
+        }
+        */
+        if(badgerRespawn)
+        {
+            //Debug.Log("respawn");
+            badgerRespawn = false;
+            badgers.Dequeue().SetActive(true);
+            badgerSize--;
+            for (int i = 0; i < 2; i++)//badger 큐를 초기화 한다
+            {
+                //Debug.Log("deqeue badger");
+                //GameObject badger = (GameObject)Instantiate(badgerOrigin);
+                badgers.Dequeue().SetActive(true);
+                //badger.SetActive(true);
+            }
+            badgerSize = 2;
+        }
 	}
 
     IEnumerator appearAgain(GameObject other)//다시 나타나게 한다..45초 후에----------돼지

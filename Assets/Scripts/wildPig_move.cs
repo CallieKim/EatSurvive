@@ -193,8 +193,9 @@ public class wildPig_move : MonoBehaviour {
 
     void setPos(GameObject obj)//감자의 위치를 정하고 게임에 나타나게 한다
     {
-        obj.transform.position = gameObject.transform.position;
+        //obj.transform.position = gameObject.transform.position;
         obj.SetActive(true);
+        obj.transform.position = gameObject.transform.position;
         obj.GetComponent<potato_control>().Start();
         //trap_click = false;
     }

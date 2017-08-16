@@ -12,8 +12,10 @@ public class Badger_move : MonoBehaviour {
     public int amountOfClicks;
     private DoubleClickListener dbl;// = new DoubleClickListener(); // (optionnal: pass a float as the delay)
     Score scoreScript;//점수 script를 저장하는 변수
-    public int badgerScore;//오소리의 점수
+    public static int badgerScore;//오소리의 점수
     GameObject barGage;
+    GameObject barGageFire;
+    public bool dead;//죽었는지 판단하는 변수이다
 
     public enum MovementState
     {
@@ -44,6 +46,7 @@ public class Badger_move : MonoBehaviour {
 
     void Start()
     {
+        dead = false;
         StartCoroutine(ChooseAction());
         meatOriginal = GameObject.FindGameObjectWithTag("meat");
         //badger = GameObject.Find("badger");
@@ -55,6 +58,7 @@ public class Badger_move : MonoBehaviour {
         scoreScript = GameObject.FindGameObjectWithTag("score").GetComponent<Score>();
         badgerScore = 300;
         barGage = GameObject.Find("meatFill");
+        barGageFire = GameObject.Find("fireFill");
         
     }
 
@@ -75,12 +79,13 @@ public class Badger_move : MonoBehaviour {
             anim.SetBool("is_dead", false);
             anim.SetBool("is_onFire", false);
         }
-        else if(MovementType==MovementState.dead)//죽은후에 , 1초후에 사라져야 한다
+        else if(MovementType==MovementState.dead && !dead)//죽은후에 , 1초후에 사라져야 한다
         {
             anim.SetBool("is_dead", true);
             anim.SetBool("is_idle", false);
             anim.SetBool("is_moving", false);
             anim.SetBool("is_onFire", false);
+            dead = true;
             //scoreScript.ScoreUp(100);//점수가 추가된다
             
             /*
@@ -112,6 +117,17 @@ public class Badger_move : MonoBehaviour {
                 //Debug.Log("badger double clicked");
                 //gameObject.SetActive(false);
                 MovementType = MovementState.dead;
+                if(Char_control.collided)//불 안 킨 상태로 부딪쳤으면 체력이 깎인다
+                {
+                    Char_control.collided = false;
+                    barGage.GetComponent<Bar_meat_control>().decreaseHealthWithDec(10f);//체력게이지가 10만큼 감소된다
+                }
+                else if(Char_control.collided_fire)//불 킨 상태로 부딪쳤으면 장작이 깎인다
+                {
+                    Char_control.collided_fire = false;
+                    barGageFire.GetComponent<Bar_fire_control>().decreaseHealthWithDec(10f);//장작 게이지가 10만큼 깎인다
+                }
+                //barGage.GetComponent<Bar_meat_control>().decreaseHealthWithDec(10f);//체력게이지가 10만큼 감소된다
             }
         }
 
@@ -188,6 +204,13 @@ public class Badger_move : MonoBehaviour {
             barGage.GetComponent<Bar_meat_control>().increaseHealth(10f);//체력게이지가 10만큼 추가된다
             scoreScript.ScoreUp(badgerScore);//점수가 추가된다
             scoreScript.badgerKill++;//죽인 오소리 수가 증가한다
+            AllAnimal.badgers.Enqueue(gameObject);//다시 큐에 들어간다
+            dead = false;//사라지기전에 초기화한다
+            madeMeat = false;
+            collided_player = false;
+            MovementType = MovementState.walking;
+            AllAnimal.badgerSize--;
+            //gameObject.SetActive(false);//
             gameObject.SetActive(false);//사라진다
         }
     }
@@ -205,8 +228,18 @@ public class Badger_move : MonoBehaviour {
         {
             //col.GetComponent<SpriteRenderer>().enabled = false;
             //GameObject.FindGameObjectWithTag("Trap").GetComponent<SpriteRenderer>().enabled = false;
-               // col.GetComponent<trap_control>().disappear();//함정은 사라진다
-                //col.gameObject.SetActive(false);//부딪힌 함정만 사라진다
+            // col.GetComponent<trap_control>().disappear();//함정은 사라진다
+            //col.gameObject.SetActive(false);//부딪힌 함정만 사라진다
+            scoreScript.badgerKill++;//죽인 오소리 수가 증가한다
+            AllAnimal.badgers.Enqueue(gameObject);//다시 큐에 들어간다
+            dead = false;//사라지기전에 초기화한다
+            madeMeat = false;
+            collided_player = false;
+            MovementType = MovementState.walking;
+            AllAnimal.badgerSize--;
+            //gameObject.SetActive(false);//
+            //gameObject.SetActive(false);//사라진다
+            MovementType = MovementState.walking;
             gameObject.SetActive(false);//오소리는 사라진다
             col.GetComponent<trap_control>().Change(badgerScore);//부딪힌 함정의 모습이 바뀐다
                 //MovementType = MovementState.dead;
@@ -216,7 +249,7 @@ public class Badger_move : MonoBehaviour {
         }
         else if(col.tag=="Player")//플레이어와 부딪히는 상태인 동안
         {
-            Debug.Log("badger collided with player");
+            //Debug.Log("badger collided with player");
             collided_player = true;
         }
 

@@ -11,8 +11,10 @@ public class Rabbit_move : MonoBehaviour {
     public bool collided_player;//플레이어와 부딪혔는지 아닌지 판단하는 변수
     private DoubleClickListener dbl;// = new DoubleClickListener(); // (optionnal: pass a float as the delay)
     Score scoreScript;//Score script를 저장하는 변수이다
-    public int rabbitScore;//토끼의 점수
+    public static int rabbitScore;//토끼의 점수
     GameObject barGage;
+    GameObject barGageFire;
+    public bool dead;//죽었는지 판단하는 변수이다
 
     public enum MovementState
     {
@@ -44,6 +46,7 @@ public class Rabbit_move : MonoBehaviour {
 
     void Start()
     {
+        dead = false;
         StartCoroutine(ChooseAction());
         meatOriginal = GameObject.FindGameObjectWithTag("meat");
         //rabbit = GameObject.Find("rabbit");
@@ -54,6 +57,7 @@ public class Rabbit_move : MonoBehaviour {
         scoreScript = GameObject.FindGameObjectWithTag("score").GetComponent<Score>();
         rabbitScore = 100;
         barGage = GameObject.Find("meatFill");
+        barGageFire = GameObject.Find("fireFill");
     }
 
     // Update is called once per frame
@@ -74,12 +78,13 @@ public class Rabbit_move : MonoBehaviour {
             anim.SetBool("is_dead", false);
             anim.SetBool("is_onFire", false);
         }
-        else if (MovementType == MovementState.dead)//죽은후에 고기생성, 1초후에 사라져야 한다
+        else if (MovementType == MovementState.dead && !dead)//죽은후에 고기생성, 1초후에 사라져야 한다
         {
             anim.SetBool("is_dead", true);
             anim.SetBool("is_onHit", false);
             anim.SetBool("is_moving", false);
             anim.SetBool("is_onFire", false);
+            dead = true;
             /*
             if (!madeMeat)//고기를 아직 생성하지 않았다면
             {
@@ -110,6 +115,16 @@ public class Rabbit_move : MonoBehaviour {
                 //Debug.Log("badger double clicked");
                 //gameObject.SetActive(false);
                 MovementType = MovementState.dead;
+                if (Char_control.collided)//불 안 킨 상태로 부딪쳤으면 체력이 깎인다
+                {
+                    Char_control.collided = false;
+                    barGage.GetComponent<Bar_meat_control>().decreaseHealthWithDec(10f);//체력게이지가 10만큼 감소된다
+                }
+                else if (Char_control.collided_fire)//불 킨 상태로 부딪쳤으면 장작이 깎인다
+                {
+                    Char_control.collided_fire = false;
+                    barGageFire.GetComponent<Bar_fire_control>().decreaseHealthWithDec(10f);//장작 게이지가 10만큼 깎인다
+                }
             }
         }
 
@@ -189,6 +204,12 @@ public class Rabbit_move : MonoBehaviour {
             barGage.GetComponent<Bar_meat_control>().increaseHealth(10f);//체력 게이지가 10만큼 추가된다
             scoreScript.ScoreUp(rabbitScore);
             scoreScript.rabbitKill++;//죽인 토끼수가 증가한다
+            AllAnimal.rabbits.Enqueue(gameObject);//다시 큐에 들어간다
+            AllAnimal.rabbitSize--;
+            dead = false;//사라지기전에 초기화한다
+            madeMeat = false;
+            collided_player = false;
+            MovementType = MovementState.walking;
             gameObject.SetActive(false);//사라진다
         }
     }
@@ -208,6 +229,13 @@ public class Rabbit_move : MonoBehaviour {
             //GameObject.FindGameObjectWithTag("Trap").GetComponent<SpriteRenderer>().enabled = false;
             // col.GetComponent<trap_control>().disappear();//함정은 사라진다
             //col.gameObject.SetActive(false);//부딪힌 함정만 사라진다
+            scoreScript.rabbitKill++;//죽인 토끼수가 증가한다
+            AllAnimal.rabbits.Enqueue(gameObject);//다시 큐에 들어간다
+            AllAnimal.rabbitSize--;
+            dead = false;//사라지기전에 초기화한다
+            madeMeat = false;
+            collided_player = false;
+            MovementType = MovementState.walking;
             gameObject.SetActive(false);//오소리는 사라진다
             col.GetComponent<trap_control>().Change(rabbitScore);//부딪힌 함정의 모습이 바뀐다
                                                       //MovementType = MovementState.dead;

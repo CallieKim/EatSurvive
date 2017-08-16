@@ -49,9 +49,16 @@ public class Char_control : MonoBehaviour {
     trap_skill trapSkill;
     buff_skill buffSkill;
 
+    public bool dead;
+    public Score scoreScript;
+    GameObject ScoreObject;
+
 
     private void Start()
     {
+        ScoreObject = GameObject.FindGameObjectWithTag("score");
+        scoreScript = GameObject.FindGameObjectWithTag("score").GetComponent<Score>();
+        dead = false;
         blood = GameObject.Find("abrasion_blood");//출혈 아이콘을 저장한다
         blood.SetActive(false);
         fracture = GameObject.Find("abrasion_fracture");//골절 아이콘을 저장한다
@@ -182,13 +189,19 @@ public class Char_control : MonoBehaviour {
             anim.SetBool("is_walk", false);
            // anim.SetBool("is_onFire", false);
         }
-        else if (MovementType == MovementState.dead)
+        else if (MovementType == MovementState.dead && !dead)
         {
             anim.SetBool("is_dead", true);
             anim.SetBool("is_run", false);
             anim.SetBool("is_idle", false);
             anim.SetBool("is_walk", false);
             anim.SetBool("is_onFire", false);
+            dead = true;//죽은게 사실이니 true로 설정한다
+            //InsertRank(GameObject.FindGameObjectWithTag("score").GetComponent<Score>().score);//점수를 랭킹에 넣는다
+            InsertRank(Score.PlayerScore);
+            scoreScript.updateRank();
+            ScoreObject.SetActive(false);
+            
         }
 
         if (gameObject.transform.position.x == targetPosition.x && gameObject.transform.position.y == targetPosition.y)//클릭한 곳에 도착했으면 평상시 상태로 바뀐다
@@ -196,9 +209,14 @@ public class Char_control : MonoBehaviour {
             MovementType = MovementState.idle;
         }
 
-        if(blood.activeSelf && fracture.activeSelf)//부상 2개 다 생겼으면 죽는다
+        if(blood.activeSelf && fracture.activeSelf && !dead)//부상 2개 다 생겼으면 죽는다, 아직 죽은 상태가 아닐때
         {
             MovementType = MovementState.dead;
+            dead = true;//죽은게 사실이니 true로 설정한다
+            //InsertRank(GameObject.FindGameObjectWithTag("score").GetComponent<Score>().score);//점수를 랭킹에 넣는다
+            InsertRank(Score.PlayerScore);
+            scoreScript.updateRank();
+            ScoreObject.SetActive(false);
             gamecontrol.GetComponent<pauseButton>().deadMenu();//죽었을때 생기는 메뉴가 보인다
         }
 
@@ -308,7 +326,22 @@ public class Char_control : MonoBehaviour {
     }
 
     
-
+    void InsertRank(int Score)//스코어 값에 따라 랭킹의 위치를 바꾸어주는 함수이다
+    {
+        Debug.Log("update score + "+Score);
+        for(int i=0;i<5;i++)
+        {
+            if(Score > PlayerPrefs.GetInt(i.ToString()))
+            {
+                for(int j=4-i;j>0;j--)
+                {
+                    PlayerPrefs.SetInt(j.ToString(), PlayerPrefs.GetInt((j - 1).ToString()));
+                }
+                PlayerPrefs.SetInt(i.ToString(), Score);
+                break;
+            }
+        }
+    }
 
 
 }

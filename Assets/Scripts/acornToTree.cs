@@ -28,22 +28,27 @@ public class acornToTree : MonoBehaviour {
         if (Time.time - startTime >= 2f && !planted)//2초 지나면 나무로 모습이 바뀐다
         {
             gameObject.GetComponent<SpriteRenderer>().sprite = treeSprites[1];
-            gameObject.transform.localScale=new Vector3(0.3f, 0.3f, 1);//도토리의 크기에서 작은 나무의 크기로 scale 변환
+            gameObject.transform.localScale=new Vector3(0.5f, 0.7f, 1);//도토리의 크기에서 작은 나무의 크기로 scale 변환
             planted = true;//심어졌으니 true로 설정한다
+            clickable = true;
             //lastUpdate = Time.time;
 
         }
+        /*
         if(planted && !stopBig)//도토리가 심어졌고 아직 크는 중이면 
         {
             InvokeRepeating("Bigger", 0.5f, 1f);//커지는 함수를 1초마다 부른다
         }
+        */
+        /*
         if(Time.time - startTime >= 4f && planted)//2초동안 커지고 그 이후로는 그만 커진다
         {
             CancelInvoke("Bigger");
             stopBig = true;
             clickable = true;//누를 수 있는 상태가 된다
         }
-        
+        */
+        //clickable = true;
         //gameObject.GetComponent<SpriteRenderer>().sprite = treeSprites[2];
 
         //InvokeRepeating("Bigger", 0.5f, 1f);//커지는 함수를 1초마다 부른다

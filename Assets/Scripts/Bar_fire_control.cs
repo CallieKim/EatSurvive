@@ -53,11 +53,13 @@ public class Bar_fire_control : MonoBehaviour {
         {
             dec_health = dec_fire_health - 0.4f;
         }
+        /*
         if (Char_control.collided_fire == true)//불켜진 상태에서 동물이랑 부딪쳤으면
         {
             decreaseHealthWithDec(10f);//인자 10f만큼 체력을 감소시킨다
             Char_control.collided_fire = false;
         }
+        */
         if (cur_health < 0)//체력이 0이 될때
         {
             cur_health = 0f;
@@ -98,6 +100,16 @@ public class Bar_fire_control : MonoBehaviour {
     void setHealth(float myHealth)
     {
         bar.fillAmount = myHealth;
+    }
+
+    public void invincible()//무적일때 체력을 안깎는다
+    {
+        CancelInvoke("decreaseHealth");
+    }
+
+    public void notInvincible()//무적이 아니면 다시 체력이 깎인다
+    {
+        InvokeRepeating("decreaseHealth", 0.5f, dec_delay);//0.5초후에 깎이는데, dec_delay만큼 decreaseHealth함수를 반복한다
     }
 
 }

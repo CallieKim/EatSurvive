@@ -17,7 +17,7 @@ public class potato_control : MonoBehaviour {
     // Use this for initialization
     public void Start()
     {
-        Debug.Log("called start");
+        //Debug.Log("called start");
         aliveCount = 0;
         pig = GameObject.FindGameObjectWithTag("enemy");
         scoreScript = GameObject.FindGameObjectWithTag("score").GetComponent<Score>();
@@ -60,7 +60,7 @@ public class potato_control : MonoBehaviour {
     {
         if (potato_col)//감자를 클릭했으면
         {
-            Debug.Log("eaten");
+            //Debug.Log("eaten");
             potato_col = false;
             scoreScript.ScoreUp(3000);//점수는 3000 점 올린다
             wildPig_move.potatos.Enqueue(gameObject);//큐에 넣는다

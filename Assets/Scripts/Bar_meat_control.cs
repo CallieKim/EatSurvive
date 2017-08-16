@@ -34,11 +34,13 @@ public class Bar_meat_control : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+        /*
         if (Char_control.collided == true)//불안켜진 상태에서 동물이랑 부딪쳤으면
         {
             decreaseHealthWithDec(10f);//인자 10f만큼 체력을 감소시킨다
             Char_control.collided = false;
         }
+        */
         if(player.GetComponent<Char_control>().MovementType==Char_control.MovementState.running)//player가 뛰는상태라면 체력이 더 급격하게 감소해야 한다
         {
             //Debug.Log("run_dec_health");
@@ -110,5 +112,15 @@ public class Bar_meat_control : MonoBehaviour {
     void setHealth(float myHealth)
     {
         bar.fillAmount = myHealth;
+    }
+
+    public void invincible()//무적일때 체력을 안깎는다
+    {
+        CancelInvoke("decreaseHealth");
+    }
+
+    public void notInvincible()//무적이 아니면 다시 체력이 깎인다
+    {
+        InvokeRepeating("decreaseHealth", 0.5f, dec_delay);//0.5초후에 깎이는데, dec_delay만큼 decreaseHealth함수를 반복한다
     }
 }

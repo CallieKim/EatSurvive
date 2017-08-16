@@ -80,6 +80,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\acornToTree.cs" />
     <Compile Include="Assets\Scripts\AllAnimal.cs" />
+    <Compile Include="Assets\Scripts\animalEvent.cs" />
     <Compile Include="Assets\Scripts\Badger_control.cs" />
     <Compile Include="Assets\Scripts\Badger_move.cs" />
     <Compile Include="Assets\Scripts\Bar_control.cs" />
