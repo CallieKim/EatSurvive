@@ -36,8 +36,8 @@ public class Char_control : MonoBehaviour {
 
     Animator anim;//캐릭터의 animator
     //public Sprite[] hurtSprites;
-    GameObject blood;
-    GameObject fracture;
+    public GameObject blood;
+    public GameObject fracture;
     GameObject gamecontrol;//정지 메뉴를 보이기 위해서
 
     private DoubleClickListener dbl = new DoubleClickListener(); // (optionnal: pass a float as the delay)
@@ -189,7 +189,7 @@ public class Char_control : MonoBehaviour {
             anim.SetBool("is_walk", false);
            // anim.SetBool("is_onFire", false);
         }
-        else if (MovementType == MovementState.dead && !dead)
+        else if (MovementType == MovementState.dead)// && !dead 안 붙인 버전이다
         {
             anim.SetBool("is_dead", true);
             anim.SetBool("is_run", false);

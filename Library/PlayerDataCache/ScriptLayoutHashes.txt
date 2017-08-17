@@ -1,7 +1,7 @@
 Android
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.bloodActive
 dc07d7ad69b399a46e92c483bf1c04ca UnityEngine.Analytics.dll:UnityEngine.Analytics.AnalyticsTracker
-ab000ccf5e33caa50bf6653265e1c4e9 Assembly-CSharp.dll:.Char_control
+f7095140c6734f693047578949f8a063 Assembly-CSharp.dll:.Char_control
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationPlayableAsset
 cac917711d0e84d412d48737b6fc9ae7 UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationTrack
 706b890efe0a474d76b40e459ddb3e76 UnityEngine.Timeline.dll:UnityEngine.Timeline.AnimationPlayableAsset
@@ -157,3 +157,5 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.VR.WSA.Spa
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.Badger_control
 c343ce7c7b922427fd1e8ea672c756cc Assembly-CSharp.dll:.Camera_control
 6728051c52efc63a1600e02cd4968403 Assembly-CSharp.dll:.buff_skill
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.MainBGM
+a87fd83b1778b74d6f152fc8ee52290e Assembly-CSharp.dll:.SoundManager

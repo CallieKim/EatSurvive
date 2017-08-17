@@ -32,8 +32,8 @@ public class Badger_move : MonoBehaviour {
     GameObject WP; //waypoint 초기화
     bool wayP=false;
 
-    float min_distance = -2.0f;
-    float max_distance = 2.0f;
+    float min_distance = -4.0f;
+    float max_distance = 4.0f;
 
     Animator anim;//오소리의 animator
 

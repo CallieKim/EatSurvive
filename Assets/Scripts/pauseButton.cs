@@ -60,6 +60,8 @@ public class pauseButton : MonoBehaviour {
 
     public void Resume()
     {
+        //SoundManager.soundManager.PlayClickSound();
+        //AudioSource.PlayClipAtPoint(SoundManager.soundManager.clickClip,transform.position,100f);
         pause = false;
         pauseUI.SetActive(false);//정지 메뉴를 안보이게 한다
         button.SetActive(true);//정지 버튼이 다시 보이게 한다
@@ -70,10 +72,12 @@ public class pauseButton : MonoBehaviour {
 
     public void mainMenu()//메인 메뉴로 돌아간다
     {
+        //SoundManager.soundManager.PlayClickSound();
         SceneManager.LoadScene("Start");
     }
     public void Restart()
     {
+        //SoundManager.soundManager.PlayClickSound();
         //Application.LoadLevel(Application.loadedLevel);
         //SceneManager.LoadScene("Field");
         //pause = false;

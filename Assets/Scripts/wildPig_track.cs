@@ -9,13 +9,13 @@ public class wildPig_track : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         track = false;
-        Flip = GetComponent<SpriteRenderer>().flipX;
+        //Flip = GetComponent<SpriteRenderer>().flipX;
         
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        Flip = GameObject.Find("WildPig").GetComponentInParent<SpriteRenderer>().flipX;
+        GetComponent<SpriteRenderer>().flipX = GameObject.Find("WildPig").GetComponentInParent<SpriteRenderer>().flipX;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
