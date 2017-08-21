@@ -94,6 +94,7 @@
     <Compile Include="Assets\Scripts\cloud_move.cs" />
     <Compile Include="Assets\Scripts\DoubleClickListener.cs" />
     <Compile Include="Assets\Scripts\flint_skill.cs" />
+    <Compile Include="Assets\Scripts\LoadCharacter.cs" />
     <Compile Include="Assets\Scripts\MainBGM.cs" />
     <Compile Include="Assets\Scripts\MainMenu.cs" />
     <Compile Include="Assets\Scripts\meat_control.cs" />

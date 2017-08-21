@@ -24,6 +24,8 @@ public class flint_skill : MonoBehaviour {
 
     private void OnMouseDown()//flint 버튼을 클릭하면
     {
+
+        Debug.Log("flint click");
         if (fireOn && fireBarHealth > 0)//스킬이 이미 커져있는데 또 눌렀다면 꺼진다
         {
             //Debug.Log("fireOn"+fireOn);

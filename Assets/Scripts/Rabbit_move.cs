@@ -110,6 +110,7 @@ public class Rabbit_move : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && collided_player)
         {//플레이어와 부딪힌상태에서 2번 클릭했으면 죽는다
+            Char_control.attackState = true;
             if (dbl.isDoubleClicked())
             {
                 //Debug.Log("badger double clicked");
@@ -118,12 +119,20 @@ public class Rabbit_move : MonoBehaviour {
                 if (Char_control.collided)//불 안 킨 상태로 부딪쳤으면 체력이 깎인다
                 {
                     Char_control.collided = false;
-                    barGage.GetComponent<Bar_meat_control>().decreaseHealthWithDec(10f);//체력게이지가 10만큼 감소된다
+                    if (!animalEvent.meat_invincible)//체력무적 아닐때
+                    {
+                        barGage.GetComponent<Bar_meat_control>().decreaseHealthWithDec(10f);//체력게이지가 10만큼 감소된다
+                    }
+                    //barGage.GetComponent<Bar_meat_control>().decreaseHealthWithDec(10f);//체력게이지가 10만큼 감소된다
                 }
                 else if (Char_control.collided_fire)//불 킨 상태로 부딪쳤으면 장작이 깎인다
                 {
                     Char_control.collided_fire = false;
-                    barGageFire.GetComponent<Bar_fire_control>().decreaseHealthWithDec(10f);//장작 게이지가 10만큼 깎인다
+                    if (!animalEvent.fire_invincible)//장작무적 아닐때
+                    {
+                        barGageFire.GetComponent<Bar_fire_control>().decreaseHealthWithDec(10f);//장작 게이지가 10만큼 깎인다
+                    }
+                    //barGageFire.GetComponent<Bar_fire_control>().decreaseHealthWithDec(10f);//장작 게이지가 10만큼 깎인다
                 }
             }
         }

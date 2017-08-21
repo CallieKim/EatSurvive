@@ -10,7 +10,7 @@ public class Bar_fire_control : MonoBehaviour {
     public float cur_health = 0f;
     public float dec_health;//불을 안 키고 있을때 감소될 수치
     public float dec_fire_health;//불을 키고 있을때 감소될 수치
-    public float dec_delay = 2.0f;
+    public float dec_delay;
     public bool noFire;//장작 게이지가 0인지 아닌지 판단하는 변수
     GameObject player;
     //Char_control playerControl;
@@ -25,10 +25,21 @@ public class Bar_fire_control : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+        if (SelectMenu.meat_char)//체력 천천히 주는 캐릭터
+        {
+            //Debug.Log("meat");
+            dec_health = 0.2f;
+            dec_delay = 0.1f;
+        }
+        else if (SelectMenu.fire_char)//장작 천천히 주는 캐릭터
+        {
+            dec_health = 0.1f;
+            dec_delay = 0.1f;
+        }
         noFire = false;//장작 게이지는 0이 아니다
         cur_health = max_health;
         InvokeRepeating("decreaseHealth", 0.5f, dec_delay);//0.5초후에 깎이는데, dec_delay만큼 decreaseHealth함수를 반복한다
-        dec_fire_health = dec_health + 0.4f;
+        dec_fire_health = dec_health + 0.1f;
         player = GameObject.FindGameObjectWithTag("Player");
         //playerControl = player.GetComponent<Char_control>();
         playerAnim = player.GetComponent<Animator>();
@@ -51,7 +62,7 @@ public class Bar_fire_control : MonoBehaviour {
         }
         else if(!playerAnim.GetBool("is_onFire"))//player의 animation이 불을 끄고 있으면
         {
-            dec_health = dec_fire_health - 0.4f;
+            dec_health = dec_fire_health - 0.1f;
         }
         /*
         if (Char_control.collided_fire == true)//불켜진 상태에서 동물이랑 부딪쳤으면

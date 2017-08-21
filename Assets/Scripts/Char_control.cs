@@ -6,7 +6,7 @@ public class Char_control : MonoBehaviour {
 
     public enum MovementState
     {
-        idle, walking, running, dead,onFire
+        idle, walking, running, dead,onFire, attack
     }
 
     public MovementState MovementType;
@@ -18,18 +18,20 @@ public class Char_control : MonoBehaviour {
     public Vector2 targetPosition;//마우스로 클릭한 위치
     public Vector2 relativePosition;//지금 캐릭터의 위치와 비교한 상대적인 위치(어느 방향, 얼마나 멀리)
 
-    private Vector2 movement;//움직임을 저장하는 변수
+    //private Vector2 movement;//움직임을 저장하는 변수
 
-    private int meatGauage=100;//체력 게이지
-    private int fireGuage = 100;//장작 게이지
+    //private int meatGauage=100;//체력 게이지
+    //private int fireGuage = 100;//장작 게이지
 
     public Image meatBar;  //Tells Unity that the gameObject is a UI Image
     public float meatFillAmount; //Fill Amount for UI Image
 
     public static bool collided = false;//불안킨 상태로 부딪혔는지 아닌지
     public static bool collided_fire = false;//불킨 상태로 부딪혔는지 아닌지
+    public static bool attackState = false;
     public bool tree_collided = false;//나무랑 부딪혔는지 아닌지 판단하는 변수
     public bool meat_collided = false;//고기랑 부딪혔는지 아닌지 판단하는 변수
+    //public bool animal_collided = false;
     public Collider2D hitCollider;
 
     bool clicked = false;//클릭해야만 움직인다
@@ -52,6 +54,7 @@ public class Char_control : MonoBehaviour {
     public bool dead;
     public Score scoreScript;
     GameObject ScoreObject;
+
 
 
     private void Start()
@@ -96,7 +99,7 @@ public class Char_control : MonoBehaviour {
     void Update()
     {
         //마우스로 클릭한 위치 받는다
-        if (Input.GetKeyDown(KeyCode.Mouse0) && !flintSkill.flint_click && !trapSkill.trap_click && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())//한번 클릭했으면 그리고 스킬들을 누른 상태가 아니라면
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !flintSkill.flint_click && !attackState && !trapSkill.trap_click && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())//한번 클릭했으면 그리고 스킬들을 누른 상태가 아니라면
         {
             
             targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -108,8 +111,8 @@ public class Char_control : MonoBehaviour {
                            //Debug.Log("target position is x: " + targetPosition.x + ", y: " + targetPosition.y);
 
             range_restrict();//클릭한 위치가 화면 위치를 벗어나는것을 막는 함수
-
-            if (dbl.isDoubleClicked())//그러나 만약 두번 클릭했으면
+            /*
+            if (dbl.isDoubleClicked())//그러나 만약 두번 클릭했으면, 동물과 부딪힌 상태가 아닐때,
             {
                 //Debug.Log("double clicked");
                 MovementType = MovementState.running;//플레이어는 뛰는 상태로 바뀐다
@@ -123,7 +126,9 @@ public class Char_control : MonoBehaviour {
                 //walking = true;
                 MovementType = MovementState.walking;
             }
-            
+            */
+                MovementType = MovementState.walking;
+
         }
         else if(flintSkill.fireOn)//flint 스킬 누른상태라면
         {
@@ -173,6 +178,7 @@ public class Char_control : MonoBehaviour {
             anim.SetBool("is_walk", true);
             anim.SetBool("is_idle", false);
             anim.SetBool("is_run", false);
+            anim.SetBool("is_attack", false);
             //anim.SetBool("is_onFire", false);
         }
         else if (MovementType == MovementState.idle)
@@ -180,6 +186,7 @@ public class Char_control : MonoBehaviour {
             anim.SetBool("is_idle", true);
             anim.SetBool("is_walk", false);
             anim.SetBool("is_run", false);
+            anim.SetBool("is_attack", false);
             //anim.SetBool("is_onFire", false);
         }
         else if (MovementType == MovementState.running)
@@ -187,11 +194,23 @@ public class Char_control : MonoBehaviour {
             anim.SetBool("is_run", true);
             anim.SetBool("is_idle", false);
             anim.SetBool("is_walk", false);
-           // anim.SetBool("is_onFire", false);
+            anim.SetBool("is_attack", false);
+            // anim.SetBool("is_onFire", false);
         }
+        /*
+        else if(MovementType==MovementState.attack)//공격상태일때
+        {
+            anim.SetBool("is_attack", true);
+            anim.SetBool("is_idle", false);
+            anim.SetBool("is_run", false);
+            anim.SetBool("is_idle", false);
+            anim.SetBool("is_walk", false);
+        }
+        */
         else if (MovementType == MovementState.dead)// && !dead 안 붙인 버전이다
         {
             anim.SetBool("is_dead", true);
+            anim.SetBool("is_attack", false);
             anim.SetBool("is_run", false);
             anim.SetBool("is_idle", false);
             anim.SetBool("is_walk", false);
@@ -251,8 +270,9 @@ public class Char_control : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Animal")//불 안켜진 상태에서 동물과 부딪혔다면
+        if (other.tag == "Animal")//동물과 부딪혔다면
         {
+            //animal_collided = true;
             //Debug.Log("animal collided with player");
             if(!anim.GetBool("is_onFire"))//불안켜진 상태에서 부딪혔다면
             {

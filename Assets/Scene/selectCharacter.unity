@@ -302,7 +302,7 @@ GameObject:
   - component: {fileID: 862599723}
   - component: {fileID: 862599724}
   m_Layer: 0
-  m_Name: GameController
+  m_Name: CharacterController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -332,6 +332,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ceef5ab530c73db4190da07d9b7be970, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  charSelected: {fileID: 0}
+  char_meat: {fileID: 1866204191057626, guid: cbb15aa16ca79514d83e97c62ab7b4ab, type: 2}
+  char_fire: {fileID: 1096517223428558, guid: 1014174548e4ea94b99f455def39d357, type: 2}
+  meat: 0
+  fire: 0
 --- !u!1 &955656945
 GameObject:
   m_ObjectHideFlags: 0
@@ -365,7 +370,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -517, y: 220.59998}
+  m_AnchoredPosition: {x: -517, y: 220.59961}
   m_SizeDelta: {x: 940.2, y: 370.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &955656947
@@ -407,12 +412,12 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 862599722}
-        m_MethodName: 
+      - m_Target: {fileID: 862599724}
+        m_MethodName: startWithMP
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 

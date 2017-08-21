@@ -35,8 +35,13 @@ public class animalEvent : MonoBehaviour {
     GameObject barMeat;
     GameObject barFire;
 
+    public static bool meat_invincible;//체력무적일때 true
+    public static bool fire_invincible;//장작무적일때 true
+
     private void Awake()
     {
+        meat_invincible = false;
+        fire_invincible = false;
         timeBar = GameObject.Find("timeBar");//시간 담는 게이지를 찾는다
         timefill = GameObject.Find("timeFill");//시간 게이지를 찾는다
         barMeat = GameObject.Find("meatFill");
@@ -194,6 +199,8 @@ public class animalEvent : MonoBehaviour {
             showBuff(buffEvents[3]);//체력 무적
             barMeat.GetComponent<Bar_meat_control>().invincible();
             barMeat.GetComponent<Bar_meat_control>().enabled = false;
+            meat_invincible = true;
+            fire_invincible = false;
             end = true;
         }
         else if(selected3)
@@ -259,6 +266,8 @@ public class animalEvent : MonoBehaviour {
             showBuff(buffEvents[4]);//장작 무적
             barFire.GetComponent<Bar_fire_control>().invincible();
             barFire.GetComponent<Bar_fire_control>().enabled = false;
+            meat_invincible = false;
+            fire_invincible = true;
             end = true;
         }
         else if (selected3)//부정적 버프
@@ -392,7 +401,9 @@ public class animalEvent : MonoBehaviour {
         //점수가 원래대로 돌아온다
         Rabbit_move.rabbitScore = 100;
         Badger_move.badgerScore = 300;
-        if(!barMeat.GetComponent<Bar_meat_control>().isActiveAndEnabled)//체력바 스크립트가 꺼져있으면 다시 킨다
+        meat_invincible = false;
+        fire_invincible = false;
+        if (!barMeat.GetComponent<Bar_meat_control>().isActiveAndEnabled)//체력바 스크립트가 꺼져있으면 다시 킨다
         {
             barMeat.GetComponent<Bar_meat_control>().enabled = true;
             barMeat.GetComponent<Bar_meat_control>().notInvincible();

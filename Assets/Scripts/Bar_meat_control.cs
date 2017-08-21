@@ -12,7 +12,7 @@ public class Bar_meat_control : MonoBehaviour {
     public float dec_health_blood;//출혈걸렸을때 감소속도
     float run_dec_health;//뛸때 감소 속도
     float walk_dec_health;//걸을때 감소 속도
-    public float dec_delay = 2.0f;
+    public float dec_delay;
     GameObject player;
     GameObject gamecontroller;
     GameObject blood;//출혈 효과 생겼는지 판단하는 변수
@@ -21,6 +21,16 @@ public class Bar_meat_control : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+        if(SelectMenu.meat_char)//체력 천천히 주는 캐릭터
+        {
+            dec_health = 0.2f;
+            dec_delay = 0.3f;
+        }
+        else if(SelectMenu.fire_char)//장작 천천히 주는 캐릭터
+        {
+            dec_health = 0.5f;
+            dec_delay = 0.3f;
+        }
         cur_health = max_health;
         walk_dec_health = dec_health;
         run_dec_health = dec_health + 0.5f;

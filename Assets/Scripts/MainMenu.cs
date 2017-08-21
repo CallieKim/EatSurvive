@@ -33,6 +33,6 @@ public class MainMenu : MonoBehaviour {
 
     public void HowToPlay()
     {
-
+        SceneManager.LoadScene("HowToPlay");
     }
 }

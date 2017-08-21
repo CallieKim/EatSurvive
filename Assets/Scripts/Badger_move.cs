@@ -16,6 +16,8 @@ public class Badger_move : MonoBehaviour {
     GameObject barGage;
     GameObject barGageFire;
     public bool dead;//죽었는지 판단하는 변수이다
+    GameObject player;//플레이어
+    
 
     public enum MovementState
     {
@@ -46,6 +48,7 @@ public class Badger_move : MonoBehaviour {
 
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
         dead = false;
         StartCoroutine(ChooseAction());
         meatOriginal = GameObject.FindGameObjectWithTag("meat");
@@ -64,6 +67,10 @@ public class Badger_move : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+        if(Input.GetMouseButtonDown(0))
+        {
+
+        }
         if (MovementType == MovementState.walking)
         {
             anim.SetBool("is_moving",true);
@@ -112,20 +119,33 @@ public class Badger_move : MonoBehaviour {
         }
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && collided_player) {//플레이어와 부딪힌상태에서 2번 클릭했으면 죽는다
+            Char_control.attackState = true;
             if (dbl.isDoubleClicked())
             {
+                //Debug.Log("double clicked");
+                //player.GetComponent<Char_control>().MovementType = Char_control.MovementState.attack;//공격 애니메이션으로 바꾼다
                 //Debug.Log("badger double clicked");
                 //gameObject.SetActive(false);
+                //player.GetComponent<Animator>().Play("char_meat_attack");
                 MovementType = MovementState.dead;
+                //player.GetComponent<Animator>().Play("char_meat_standing_noFire");
                 if(Char_control.collided)//불 안 킨 상태로 부딪쳤으면 체력이 깎인다
                 {
                     Char_control.collided = false;
-                    barGage.GetComponent<Bar_meat_control>().decreaseHealthWithDec(10f);//체력게이지가 10만큼 감소된다
+                    if(!animalEvent.meat_invincible)//체력무적아닐때
+                    {
+                        barGage.GetComponent<Bar_meat_control>().decreaseHealthWithDec(10f);//체력게이지가 10만큼 감소된다
+                    }
+                    //barGage.GetComponent<Bar_meat_control>().decreaseHealthWithDec(10f);//체력게이지가 10만큼 감소된다
                 }
                 else if(Char_control.collided_fire)//불 킨 상태로 부딪쳤으면 장작이 깎인다
                 {
                     Char_control.collided_fire = false;
-                    barGageFire.GetComponent<Bar_fire_control>().decreaseHealthWithDec(10f);//장작 게이지가 10만큼 깎인다
+                    if(!animalEvent.fire_invincible)//장작무적아닐때
+                    {
+                        barGageFire.GetComponent<Bar_fire_control>().decreaseHealthWithDec(10f);//장작 게이지가 10만큼 깎인다
+                    }
+                    //barGageFire.GetComponent<Bar_fire_control>().decreaseHealthWithDec(10f);//장작 게이지가 10만큼 깎인다
                 }
                 //barGage.GetComponent<Bar_meat_control>().decreaseHealthWithDec(10f);//체력게이지가 10만큼 감소된다
             }

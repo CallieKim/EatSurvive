@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class trap_skill : MonoBehaviour {
 
     // Use this for initialization
+    public Sprite[] trapSprites;
     public bool trap_click;
     public int trapSize = 5;
     public GameObject trapOriginal;
@@ -18,6 +19,7 @@ public class trap_skill : MonoBehaviour {
 
     void Start()
     {
+        trapSprites = Resources.LoadAll<Sprite>("Background/traps");//함정의 모습 2가지를 배열에 저장한다
         bar_meat = GameObject.Find("meatFill").GetComponent<Bar_meat_control>();//체력 게이지의 script를 찾아서 저장
         trapNumber = GameObject.Find("trapText").GetComponent<Text>();
         player = GameObject.FindGameObjectWithTag("Player");
@@ -48,12 +50,20 @@ public class trap_skill : MonoBehaviour {
     private void OnMouseDown()//trap 버튼을 클릭하면
     {
         trap_click = true;
-        Debug.Log("trap skill clicked");
+        //Debug.Log("trap skill clicked");
+        /*
         trapSize--;
         bar_meat.decreaseHealthWithDec(10);//체력이 일정 수준만큼 감소된다
         //trap_click = true;
         setPos(traps.Dequeue());
         //trap_click = false;
+        */
+        if(trapSize>0)
+        {
+            trapSize--;
+            bar_meat.decreaseHealthWithDec(10);//체력이 일정 수준만큼 감소된다
+            setPos(traps.Dequeue());
+        }
     }
 
     //함정의 위치를 정해주는 함수
@@ -69,6 +79,7 @@ public class trap_skill : MonoBehaviour {
     {
         trapSize++;
         traps.Enqueue(obj);//큐에 넣어주고
+        obj.GetComponent<SpriteRenderer>().sprite = trapSprites[1];
         obj.SetActive(false);//disable
     }
     
