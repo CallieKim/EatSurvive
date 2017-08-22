@@ -14,6 +14,9 @@ public class buff_skill : MonoBehaviour {
     public float cooldownTimer;
     public bool cooldownStart;
 
+    //GameObject blood;
+    //GameObject fracture;
+
 	// Use this for initialization
 	void Start () {
         skill_buff = false;
@@ -42,9 +45,13 @@ public class buff_skill : MonoBehaviour {
 
     public void buffClicked()//누르면 발생한다
     {
-
-        InvokeRepeating("decreaseHealth",0.0f, dec_delay);//0.0초후에 깎이는데, dec_delay만큼 decreaseHealth함수를 반복한다
-        skill_buff = true;
+        if(GameObject.FindGameObjectWithTag("abrasion").activeSelf)//상처 있어야만 스킬을 쓸 수 있다
+        {
+            InvokeRepeating("decreaseHealth", 0.0f, dec_delay);//0.0초후에 깎이는데, dec_delay만큼 decreaseHealth함수를 반복한다
+            skill_buff = true;
+        }
+        //InvokeRepeating("decreaseHealth",0.0f, dec_delay);//0.0초후에 깎이는데, dec_delay만큼 decreaseHealth함수를 반복한다
+        //skill_buff = true;
         //cooldownStart = true;
 
     }

@@ -11,6 +11,7 @@ public class Score : MonoBehaviour {
     float lastUpdate;
     public int badgerKill;//죽인 오소리 수
     public int rabbitKill;//죽인 토끼 수
+    public int sheepKill;//죽인 양의 수
 
     public Text Ranking;
     public TextMesh RankingText;
@@ -29,6 +30,7 @@ public class Score : MonoBehaviour {
         scoreText = gameObject.GetComponent<Text>();
         badgerKill = 0;
         rabbitKill = 0;
+        sheepKill = 0;
 
         for(int i=0;i<5;i++)
         {

@@ -11,6 +11,7 @@ public class trap_control : MonoBehaviour {
     public bool trapclick;//플레이어가 함정 수거하려고 클릭했는지 아닌지 판단하는 변수
     public bool trapuUsed;//일회용이라서 이미 사용했는지 아닌지 판단하는 변수
     public GameObject barGage;//체력 게이지를 저장하는 변수
+    public GameObject barGage_fire;//장작 게이지를 저장하는 변수
 
     private void Awake()
     {
@@ -28,6 +29,7 @@ public class trap_control : MonoBehaviour {
         //trapclick = false;
         trapuUsed = false;
         barGage = GameObject.Find("meatFill");
+        barGage_fire = GameObject.Find("fireFill");
     }
 	
 	// Update is called once per frame
@@ -37,7 +39,12 @@ public class trap_control : MonoBehaviour {
 
     public void Change(int number)//동물이 걸리면 함정의 모습이 바뀐다 그리고 사라진다 + 점수도 추가된다(2배)
     {
-        gameObject.GetComponent<SpriteRenderer>().sprite = trapSprites[0];
+        if(SelectMenu.meat_char)//체력 캐릭터이면...함정의 모습이 링 있는걸로...
+        {
+            Debug.Log("change");
+            gameObject.GetComponent<SpriteRenderer>().sprite = trapSprites[1];
+        }
+        //gameObject.GetComponent<SpriteRenderer>().sprite = trapSprites[1];
         trapuUsed = true;//사용했으니 true로 설정한다
         scoreScript.ScoreUp(number * 2);
         StartCoroutine("disappear");
@@ -51,7 +58,7 @@ public class trap_control : MonoBehaviour {
         //trapuUsed = false;//큐에 넣기 전에 사용횟수를 초기화한다
         //trapclick = false;//큐에 넣기 전에 초기화한다
         //trapSkill.GetObj(gameObject);//함정 큐에 다시 넣는다
-        yield return new WaitForSeconds(5f);//일정시간동안 기다린다
+        yield return new WaitForSeconds(3f);//일정시간동안 기다린다
         //gameObject.SetActive(true);
         trapuUsed = false;//큐에 넣기 전에 사용횟수를 초기화한다
         trapclick = false;//큐에 넣기 전에 초기화한다
@@ -67,7 +74,15 @@ public class trap_control : MonoBehaviour {
             {
                 //gameObject.SetActive(false);
                 //gameObject.GetComponent<SpriteRenderer>().enabled = false;
-                barGage.GetComponent<Bar_meat_control>().increaseHealth(5f);//함정을 수거했으니 약소하게나마 체력이 다시 찬다
+                if(SelectMenu.meat_char)
+                {
+                    barGage.GetComponent<Bar_meat_control>().increaseHealth(5f);//함정을 수거했으니 약소하게나마 체력이 다시 찬다
+                }
+                else if(SelectMenu.fire_char)
+                {
+                    barGage_fire.GetComponent<Bar_fire_control>().increaseHealth(5f);//장작 게이지가 약소하게나마 찬다
+                }
+                //barGage.GetComponent<Bar_meat_control>().increaseHealth(5f);//함정을 수거했으니 약소하게나마 체력이 다시 찬다
                 trapclick = false;//큐에 넣기 전에 초기화한다
                 trapuUsed = false;//큐에 넣기 전에 초기화한다
                 trapSkill.GetObj(gameObject);//함정을 큐에 넣는다

@@ -7,19 +7,38 @@ public class AllAnimal : MonoBehaviour {
     GameObject squirrel;
     GameObject rabbitOrigin;
     GameObject badgerOrigin;
+    GameObject sheepOrigin;
 
     public static Queue<GameObject> rabbits = new Queue<GameObject>();//rabbit 큐, 토끼는 3마리까지
     public static int rabbitSize=3;
-    public static Queue<GameObject> badgers = new Queue<GameObject>();//badger 큐, 오소리는 1마리가지
+    public static Queue<GameObject> badgers = new Queue<GameObject>();//badger 큐, 오소리는 2마리가지
     public static int badgerSize=2;
+    public static Queue<GameObject> sheeps = new Queue<GameObject>();//sheep 큐, 양은 1마리..
+    public static int sheepSize = 1;
 
     public bool rabbitRespawn;
     public bool badgerRespawn;
+    public bool sheepRespawn;
 
+    public Vector3[] spawnPos = new Vector3[5];//랜덤 위치 5개 정한다
+    public int spawnPoint;
+
+
+    public void Awake()
+    {
+        spawnPoint = 0;
+        spawnPos[0] = new Vector3(3.3f, -1.6f, 0);
+        spawnPos[1] = new Vector3(2.2f, 1.4f, 0);
+        spawnPos[2] = new Vector3(-2f, 1.6f, 0);
+        spawnPos[3] = new Vector3(-5f, 0, 0);
+        spawnPos[4] = new Vector3(-4.6f, -1.37f, 0);
+
+    }
     // Use this for initialization
     void Start () {
         rabbitRespawn = false;
         badgerRespawn = false;
+        sheepRespawn = false;
         pig = GameObject.FindGameObjectWithTag("enemy");
         squirrel = GameObject.Find("squirrel");
         rabbitOrigin = GameObject.Find("rabbit");
@@ -28,6 +47,7 @@ public class AllAnimal : MonoBehaviour {
         badgerOrigin = GameObject.Find("badger");
         //badgers.Enqueue(badgerOrigin);
         //badgerOrigin.SetActive(false);
+        sheepOrigin = GameObject.Find("sheep");
 
         for (int i=0;i<3;i++)//rabbit 큐를 초기화 한다
         {
@@ -45,6 +65,13 @@ public class AllAnimal : MonoBehaviour {
         }
         badgerOrigin.SetActive(false);
         //badgerSize = 0;
+        for (int i = 0; i < 1; i++)//sheep 큐를 초기화 한다
+        {
+            GameObject sheep = (GameObject)Instantiate(sheepOrigin);
+            sheeps.Enqueue(sheep);
+            sheep.SetActive(true);
+        }
+        sheepOrigin.SetActive(false);
     }
 	
 	// Update is called once per frame
@@ -83,13 +110,18 @@ public class AllAnimal : MonoBehaviour {
         {
             badgerRespawn = true;
         }
+        if(sheepSize==0)
+        {
+            sheepRespawn = true;
+        }
         if(rabbitRespawn)
         {
             rabbitRespawn = false;
             for (int i = 0; i < 3; i++)//rabbit 큐를 초기화 한다
             {
                 //GameObject rabbit = (GameObject)Instantiate(rabbitOrigin);
-                rabbits.Dequeue().SetActive(true);
+                //rabbits.Dequeue().SetActive(true);
+                setPos(rabbits.Dequeue());
                 
             }
             rabbitSize = 3;
@@ -105,18 +137,35 @@ public class AllAnimal : MonoBehaviour {
         {
             //Debug.Log("respawn");
             badgerRespawn = false;
-            badgers.Dequeue().SetActive(true);
-            badgerSize--;
+            //badgers.Dequeue().SetActive(true);
+            //badgerSize--;
             for (int i = 0; i < 2; i++)//badger 큐를 초기화 한다
             {
                 //Debug.Log("deqeue badger");
                 //GameObject badger = (GameObject)Instantiate(badgerOrigin);
-                badgers.Dequeue().SetActive(true);
+                //badgers.Dequeue().SetActive(true);
                 //badger.SetActive(true);
+                setPos(badgers.Dequeue());
             }
             badgerSize = 2;
         }
-	}
+        if (sheepRespawn)
+        {
+            //Debug.Log("respawn");
+            sheepRespawn = false;
+            //sheeps.Dequeue().SetActive(true);
+            //sheepSize--;
+            for (int i = 0; i < 1; i++)//sheep 큐를 초기화 한다
+            {
+                //Debug.Log("deqeue badger");
+                //GameObject badger = (GameObject)Instantiate(badgerOrigin);
+                //sheeps.Dequeue().SetActive(true);
+                setPos(sheeps.Dequeue());
+                //badger.SetActive(true);
+            }
+            sheepSize = 1;
+        }
+    }
 
     IEnumerator appearAgain(GameObject other)//다시 나타나게 한다..45초 후에----------돼지
     {
@@ -157,4 +206,15 @@ public class AllAnimal : MonoBehaviour {
         //Debug.Log("again finish");
         StopCoroutine("appearAgain");
     }
+
+    void setPos(GameObject obj)//물체의 위치를 정하고 게임에 나타나게 한다
+    {
+        //obj.transform.position = gameObject.transform.position;
+        obj.SetActive(true);
+        spawnPoint = Random.Range(0, 4);//랜덤위치를 5개중에 정한다
+        obj.transform.position = spawnPos[spawnPoint];//거기로 위치 정한다
+        //trap_click = false;
+    }
+
+
 }

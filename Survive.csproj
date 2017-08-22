@@ -83,6 +83,7 @@
     <Compile Include="Assets\Scripts\animalEvent.cs" />
     <Compile Include="Assets\Scripts\Badger_control.cs" />
     <Compile Include="Assets\Scripts\Badger_move.cs" />
+    <Compile Include="Assets\Scripts\badger_move_test.cs" />
     <Compile Include="Assets\Scripts\Bar_control.cs" />
     <Compile Include="Assets\Scripts\Bar_fire_control.cs" />
     <Compile Include="Assets\Scripts\Bar_meat_control.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Assets\Scripts\buttonManager.cs" />
     <Compile Include="Assets\Scripts\Camera_control.cs" />
     <Compile Include="Assets\Scripts\Char_control.cs" />
+    <Compile Include="Assets\Scripts\char_control_test.cs" />
     <Compile Include="Assets\Scripts\cloud_move.cs" />
     <Compile Include="Assets\Scripts\DoubleClickListener.cs" />
     <Compile Include="Assets\Scripts\flint_skill.cs" />
@@ -103,6 +105,7 @@
     <Compile Include="Assets\Scripts\Rabbit_move.cs" />
     <Compile Include="Assets\Scripts\Score.cs" />
     <Compile Include="Assets\Scripts\SelectMenu.cs" />
+    <Compile Include="Assets\Scripts\sheep_move.cs" />
     <Compile Include="Assets\Scripts\SoundManager.cs" />
     <Compile Include="Assets\Scripts\Squirrel_move.cs" />
     <Compile Include="Assets\Scripts\trap_control.cs" />

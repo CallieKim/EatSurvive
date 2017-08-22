@@ -5,6 +5,14 @@ using UnityEngine;
 public class DoubleClickListener : MonoBehaviour {
 
     bool firstClick = false;
+    bool doubleClick = false;
+    bool TripleClick = false;
+    bool FourClick = false;
+    bool FiveClick = false;
+    bool SixClick = false;
+
+    int num = 0;
+
     float runningTimerSecond;
     GameObject player;
 
@@ -80,7 +88,11 @@ public class DoubleClickListener : MonoBehaviour {
 
             return false;
         }
-        /*
+
+    }
+
+    public bool isTripleClicked()
+    {
         // If the time is too long we reset first click variable
         if (firstClick && (Time.time - runningTimerSecond) > delay)
         {
@@ -92,7 +104,7 @@ public class DoubleClickListener : MonoBehaviour {
             firstClick = true;
             runningTimerSecond = Time.time;
         }
-        else
+        else//double click 성공
         {
             //Debug.Log("doubleclick true");
             firstClick = false;
@@ -100,6 +112,7 @@ public class DoubleClickListener : MonoBehaviour {
         }
 
         return false;
-        */
     }
+
+
 }

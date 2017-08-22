@@ -1,0 +1,279 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class sheep_move : MonoBehaviour {
+
+    public GameObject meatOriginal;//복사대상이 될 고기
+    //public GameObject rabbit;
+    public bool madeMeat;//고기를 만들었는지 확인하는 변수
+    public bool trapSense;//함정을 감지하는지 판단하는 변수
+    public bool collided_player;//플레이어와 부딪혔는지 아닌지 판단하는 변수
+    private DoubleClickListener dbl;// = new DoubleClickListener(); // (optionnal: pass a float as the delay)
+    Score scoreScript;//Score script를 저장하는 변수이다
+    public static int sheepScore;//양의 점수
+    GameObject barGage;
+    GameObject barGageFire;
+    public bool dead;//죽었는지 판단하는 변수이다
+
+
+
+    public enum MovementState
+    {
+        walking, hit, run, dead
+    }
+
+    public MovementState MovementType;
+
+    public float speed = 0.5f;
+    float speed_attacked;
+    //float rotateSpeed = 2.0f;
+
+    public GameObject Waypoint;
+    GameObject WP; //waypoint 초기화
+    bool wayP = false;
+
+    float min_distance = -4.0f;
+    float max_distance = 4.0f;
+
+    Animator anim;//토끼의 animator
+
+
+    // Use this for initialization
+    void Awake()
+    {
+        
+        anim = GetComponent<Animator>();
+        anim.speed = 0.7f;
+
+    }
+
+    void Start()
+    {
+        dead = false;
+        StartCoroutine(ChooseAction());
+        meatOriginal = GameObject.FindGameObjectWithTag("meat");
+        //rabbit = GameObject.Find("rabbit");
+        madeMeat = false;
+        collided_player = false;
+        speed_attacked = speed * 0.1f;
+        dbl = gameObject.AddComponent<DoubleClickListener>();
+        scoreScript = GameObject.FindGameObjectWithTag("score").GetComponent<Score>();
+        sheepScore = 500;
+        barGage = GameObject.Find("meatFill");
+        barGageFire = GameObject.Find("fireFill");
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (MovementType == MovementState.walking)
+        {
+            anim.SetBool("is_moving", true);
+            anim.SetBool("is_onHit", false);
+            anim.SetBool("is_dead", false);
+            anim.SetBool("is_onFire", false);
+            createWaypoint();
+        }
+        else if (MovementType == MovementState.hit)//공격당하고 있을때
+        {
+            anim.SetBool("is_onHit", true);
+            anim.SetBool("is_moving", false);
+            anim.SetBool("is_dead", false);
+            anim.SetBool("is_onFire", false);
+        }
+        else if (MovementType == MovementState.dead && !dead)//죽은후에 고기생성, 1초후에 사라져야 한다
+        {
+            anim.SetBool("is_dead", true);
+            anim.SetBool("is_onHit", false);
+            anim.SetBool("is_moving", false);
+            anim.SetBool("is_onFire", false);
+            dead = true;
+            /*
+            if (!madeMeat)//고기를 아직 생성하지 않았다면
+            {
+                Instantiate(meatOriginal, new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity);//고기를 그 자리에서 한번만 생성한다
+                madeMeat = true;//고기를 생성했다
+            }
+            */
+            //Instantiate(meatOriginal,new Vector3(transform.position.x,transform.position.y,0), Quaternion.identity);//고기를 그 자리에서 생성한다
+            StartCoroutine(Dead());//죽었을때 실행되는 함수 코루틴을 부른다
+        }
+        else if (MovementType == MovementState.run)//불에 타면서 도망갈때
+        {
+            anim.SetBool("is_onFire", true);
+            anim.SetBool("is_dead", false);
+            anim.SetBool("is_onHit", false);
+            anim.SetBool("is_moving", false);
+        }
+
+        if (wayP)
+        {
+            move();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0) && collided_player)
+        {//플레이어와 부딪힌상태에서 2번 클릭했으면 죽는다
+            Char_control.attackState = true;
+            if (dbl.isDoubleClicked())
+            {
+                //Debug.Log("badger double clicked");
+                //gameObject.SetActive(false);
+                MovementType = MovementState.dead;
+                if (Char_control.collided)//불 안 킨 상태로 부딪쳤으면 체력이 깎인다
+                {
+                    Char_control.collided = false;
+                    if (!animalEvent.meat_invincible)//체력무적 아닐때
+                    {
+                        barGage.GetComponent<Bar_meat_control>().decreaseHealthWithDec(10f);//체력게이지가 10만큼 감소된다
+                    }
+                    //barGage.GetComponent<Bar_meat_control>().decreaseHealthWithDec(10f);//체력게이지가 10만큼 감소된다
+                }
+                else if (Char_control.collided_fire)//불 킨 상태로 부딪쳤으면 장작이 깎인다
+                {
+                    Char_control.collided_fire = false;
+                    if (!animalEvent.fire_invincible)//장작무적 아닐때
+                    {
+                        barGageFire.GetComponent<Bar_fire_control>().decreaseHealthWithDec(10f);//장작 게이지가 10만큼 깎인다
+                    }
+                    //barGageFire.GetComponent<Bar_fire_control>().decreaseHealthWithDec(10f);//장작 게이지가 10만큼 깎인다
+                }
+            }
+        }
+
+    }
+
+    void createWaypoint()//목표지점 생성 이때 목표지점은 화면 밖을 벗어나면 안된다
+    {
+        if (!wayP)
+        {
+            float distanceX = transform.position.x + Random.Range(min_distance, max_distance);//waypont과 캐릭터 사이의 거리
+            float distanceY = transform.position.y + Random.Range(min_distance, max_distance);
+            if (Mathf.Abs(distanceY) <= 2.3f && Mathf.Abs(distanceX) <= 6.0f)//목표 지점이 화면 범위 내일때에만 생성된다
+            {
+                WP = Instantiate(Waypoint, new Vector2(distanceX, distanceY), Quaternion.identity) as GameObject;
+                wayP = true;
+            }
+            //WP = Instantiate(Waypoint, new Vector2(distanceX,distanceY),Quaternion.identity) as GameObject;
+            //wayP = true;         
+        }
+
+    }
+
+    void move()//양이 목표지점까지 이동한다
+    {
+        if (WP.transform.position.x - transform.position.x < 0)
+        {
+            GetComponent<SpriteRenderer>().flipX = true;
+        }
+        else if (WP.transform.position.x - transform.position.x > 0)
+        {
+            GetComponent<SpriteRenderer>().flipX = false;
+        }
+        transform.position = Vector2.MoveTowards(transform.position, WP.transform.position, speed * Time.deltaTime);
+        //var rotation = Quaternion.LookRotation(WP.transform.position - transform.position);
+        //transform.rotation = Quaternion.Slerp(transform.rotation, rotation,rotateSpeed*Time.deltaTime);
+    }
+
+    private IEnumerator ChooseAction()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(0.5f);//0.5초 동안 기다림
+            if (!wayP)
+            {
+                /*
+                int num = Random.Range(0, 2);//0과1 중 고른다 idle, walking
+                if (num == 0)
+                {
+                    MovementType = MovementState.idle;
+                }
+                else if (num == 1)
+                {
+                    MovementType = MovementState.walking;
+                }
+                */
+                MovementType = MovementState.walking;
+            }
+        }
+    }
+
+    IEnumerator Dead()//죽었을때 실행된다 + 점수도 추가된다 이때 때려서 죽인거니까 고기는 생성되지 않는다
+    {
+        while (true)
+        {
+            wayP = false;//움직이지 않는다
+            Destroy(WP);
+            yield return new WaitForSeconds(1.5f);//일정시간동안 시체가 보인다
+                                                  //wayP = false;//움직이지 않는다
+                                                  //Destroy(WP);
+                                                  /*
+                                                  if (!madeMeat)//고기를 아직 생성하지 않았다면
+                                                  {
+                                                      Instantiate(meatOriginal, new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity);//고기를 그 자리에서 한번만 생성한다
+                                                      madeMeat = true;//고기를 생성했다
+                                                  }
+                                                  */
+            barGage.GetComponent<Bar_meat_control>().increaseHealth(10f);//체력 게이지가 10만큼 추가된다
+            scoreScript.ScoreUp(sheepScore);
+            
+            scoreScript.sheepKill++;//죽인 토끼수가 증가한다
+            AllAnimal.sheeps.Enqueue(gameObject);//다시 큐에 들어간다
+            AllAnimal.sheepSize--;
+            
+            dead = false;//사라지기전에 초기화한다
+            madeMeat = false;
+            collided_player = false;
+            MovementType = MovementState.walking;
+            gameObject.SetActive(false);//사라진다
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.CompareTag("WayPoint"))
+        {
+            //Debug.Log("entered waypoint");
+            Destroy(WP);
+            wayP = false;
+            MovementType = MovementState.walking;
+        }
+        else if (col.tag == "Trap" && !col.GetComponent<trap_control>().trapuUsed)//동물이 함정이랑 부딪히면 발생 이때 함정은 한번도 쓰이지 않았다.
+        {
+            //col.GetComponent<SpriteRenderer>().enabled = false;
+            //GameObject.FindGameObjectWithTag("Trap").GetComponent<SpriteRenderer>().enabled = false;
+            // col.GetComponent<trap_control>().disappear();//함정은 사라진다
+            //col.gameObject.SetActive(false);//부딪힌 함정만 사라진다
+            
+            scoreScript.sheepKill++;//죽인 토끼수가 증가한다
+            AllAnimal.sheeps.Enqueue(gameObject);//다시 큐에 들어간다
+            AllAnimal.sheepSize--;
+            
+            dead = false;//사라지기전에 초기화한다
+            madeMeat = false;
+            collided_player = false;
+            MovementType = MovementState.walking;
+            gameObject.transform.position = new Vector3();//사라지기전에 위치 정해져야 한다-------------------------------
+            gameObject.SetActive(false);//양은 사라진다
+            col.GetComponent<trap_control>().Change(sheepScore);//부딪힌 함정의 모습이 바뀐다
+                                                                 //MovementType = MovementState.dead;
+                                                                 //col.GetComponent<trap_control>().disappear();//함정은 사라진다
+                                                                 //MovementType = MovementState.dead;
+
+        }
+        else if (col.tag == "Player")//플레이어와 부딪히는 상태인 동안
+        {
+            //Debug.Log("badger collided with player");
+            collided_player = true;
+        }
+
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)//부딪히는 범위에서 빠져나왔으면
+    {
+        if (collision.tag == "Player")
+        {
+            collided_player = false;//플레이어와 부딪힌게 아니기 때문에 false로 표현
+        }
+    }
+}

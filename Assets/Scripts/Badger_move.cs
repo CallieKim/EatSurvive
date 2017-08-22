@@ -67,18 +67,16 @@ public class Badger_move : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        if(Input.GetMouseButtonDown(0))
-        {
-
-        }
         if (MovementType == MovementState.walking)
         {
             anim.SetBool("is_moving",true);
             anim.SetBool("is_idle", false);
             anim.SetBool("is_dead", false);
             anim.SetBool("is_onFire", false);
+            //Debug.Log("create waypoint");
             createWaypoint();
         }
+        
         else if(MovementType==MovementState.idle)
         {
             anim.SetBool("is_idle", true);
@@ -86,6 +84,7 @@ public class Badger_move : MonoBehaviour {
             anim.SetBool("is_dead", false);
             anim.SetBool("is_onFire", false);
         }
+        
         else if(MovementType==MovementState.dead && !dead)//죽은후에 , 1초후에 사라져야 한다
         {
             anim.SetBool("is_dead", true);
@@ -172,7 +171,8 @@ public class Badger_move : MonoBehaviour {
 
     void move()//오소리가 목표지점까지 이동한다
     {
-        if(WP.transform.position.x-transform.position.x<0)
+        //Debug.Log("badger move");
+        if (WP.transform.position.x-transform.position.x<0)
         {
             GetComponent<SpriteRenderer>().flipX = true;
         }
@@ -185,14 +185,16 @@ public class Badger_move : MonoBehaviour {
         //transform.rotation = Quaternion.Slerp(transform.rotation, rotation,rotateSpeed*Time.deltaTime);
     }
 
-    private IEnumerator ChooseAction()
+    public IEnumerator ChooseAction()
     {
         while(true)
         {
             yield return new WaitForSeconds(0.5f);//1.5초 동안 기다림
             if(!wayP)
             {
-                int num = Random.Range(0, 2);//0과1 중 고른다 idle, walking
+                
+                int num = Random.Range(0, 1);//0과1 중 고른다 idle, walking
+                //Debug.Log(num);
                 if(num==0)
                 {
                     MovementType = MovementState.idle;
@@ -201,6 +203,8 @@ public class Badger_move : MonoBehaviour {
                 {
                     MovementType = MovementState.walking;
                 }
+                
+                MovementType = MovementState.walking;
             }
         }
     }
@@ -231,6 +235,9 @@ public class Badger_move : MonoBehaviour {
             MovementType = MovementState.walking;
             AllAnimal.badgerSize--;
             //gameObject.SetActive(false);//
+            //Debug.Log("movement type is " + MovementType);
+
+
             gameObject.SetActive(false);//사라진다
         }
     }
@@ -242,7 +249,7 @@ public class Badger_move : MonoBehaviour {
             //Debug.Log("entered waypoint");
             Destroy(WP);
             wayP = false;
-            MovementType = MovementState.idle;
+            //MovementType = MovementState.idle;
         }
         else if (col.tag == "Trap" && !col.GetComponent<trap_control>().trapuUsed)//동물이 함정이랑 부딪히면 발생 이때 함정은 한번도 쓰이지 않았다.
         {
@@ -255,11 +262,12 @@ public class Badger_move : MonoBehaviour {
             dead = false;//사라지기전에 초기화한다
             madeMeat = false;
             collided_player = false;
-            MovementType = MovementState.walking;
+            //MovementType = MovementState.walking;
             AllAnimal.badgerSize--;
             //gameObject.SetActive(false);//
             //gameObject.SetActive(false);//사라진다
             MovementType = MovementState.walking;
+
             gameObject.SetActive(false);//오소리는 사라진다
             col.GetComponent<trap_control>().Change(badgerScore);//부딪힌 함정의 모습이 바뀐다
                 //MovementType = MovementState.dead;
@@ -282,31 +290,5 @@ public class Badger_move : MonoBehaviour {
             collided_player = false;//플레이어와 부딪힌게 아니기 때문에 false로 표현
         }
     }
-    /*
-    private void OnMouseDown()//오소리를 클릭했을때 호출된다
-    {
-        Debug.Log("clicked badger");
-        if(collided_player)//클릭한 상태에서 플레이어와 부딪혔으면
-        {
-            speed = speed_attacked;
-            if(amountOfClicks>3)
-            {
-                gameObject.SetActive(false);
-            }
-            else
-            {
-                amountOfClicks++;
-            }
-        }
-    }
-    */
-    /*
-    private void OnMouseOver()
-    {
-        if(Input.GetMouseButtonDown(0))
-        {
-            Debug.Log("clicked badger");
-        }
-    }
-    */
+
 }
