@@ -23,12 +23,12 @@ public class Bar_meat_control : MonoBehaviour {
     {
         if(SelectMenu.meat_char)//체력 천천히 주는 캐릭터
         {
-            dec_health = 0.2f;
+            dec_health = 0.4f;
             dec_delay = 0.3f;
         }
         else if(SelectMenu.fire_char)//장작 천천히 주는 캐릭터
         {
-            dec_health = 0.5f;
+            dec_health = 0.7f;
             dec_delay = 0.3f;
         }
         cur_health = max_health;

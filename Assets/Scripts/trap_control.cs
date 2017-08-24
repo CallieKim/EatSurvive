@@ -53,11 +53,7 @@ public class trap_control : MonoBehaviour {
 
     IEnumerator disappear()//일정시간동안 동물이 잡힌 모습으로 지내다가 trap 큐에 들어간다
     {
-        //gameObject.SetActive(false);
-        //barGage.GetComponent<Bar_meat_control>().increaseHealth(10f);//함정을 수거했으니 체력이 다시 찬다
-        //trapuUsed = false;//큐에 넣기 전에 사용횟수를 초기화한다
-        //trapclick = false;//큐에 넣기 전에 초기화한다
-        //trapSkill.GetObj(gameObject);//함정 큐에 다시 넣는다
+
         yield return new WaitForSeconds(3f);//일정시간동안 기다린다
         //gameObject.SetActive(true);
         trapuUsed = false;//큐에 넣기 전에 사용횟수를 초기화한다

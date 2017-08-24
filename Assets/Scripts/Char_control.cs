@@ -113,7 +113,7 @@ public class Char_control : MonoBehaviour
                            //Debug.Log("target position is x: " + targetPosition.x + ", y: " + targetPosition.y);
 
             range_restrict();//클릭한 위치가 화면 위치를 벗어나는것을 막는 함수
-                             /*
+                             
                              if (dbl.isDoubleClicked())//그러나 만약 두번 클릭했으면, 동물과 부딪힌 상태가 아닐때,
                              {
                                  //Debug.Log("double clicked");
@@ -128,8 +128,8 @@ public class Char_control : MonoBehaviour
                                  //walking = true;
                                  MovementType = MovementState.walking;
                              }
-                             */
-            MovementType = MovementState.walking;
+                             
+            //MovementType = MovementState.walking;
 
         }
         else if (flintSkill.fireOn)//flint 스킬 누른상태라면

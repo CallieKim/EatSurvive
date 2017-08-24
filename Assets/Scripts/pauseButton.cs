@@ -42,6 +42,7 @@ public class pauseButton : MonoBehaviour {
         pause = !pause;
         if (pause)//정지상태라면
         {
+            GameObject.Find("field").GetComponent<AudioSource>().Stop();
             pauseUI.SetActive(true);//정지 메뉴가 보이게 한다
             button.SetActive(false);//정지 버튼이 사라지게 한다
             Time.timeScale = 0;
@@ -50,6 +51,8 @@ public class pauseButton : MonoBehaviour {
         }
         else if (!pause)//정지상태가 아니라면
         {
+            Debug.Log("play");
+            GameObject.Find("field").GetComponent<AudioSource>().Play();
             pauseUI.SetActive(false);//정지 메뉴를 안보이게 한다
             button.SetActive(true);//정지 버튼이 보이게 한다
             Time.timeScale = 1;
@@ -60,8 +63,8 @@ public class pauseButton : MonoBehaviour {
 
     public void Resume()
     {
-        //SoundManager.soundManager.PlayClickSound();
-        //AudioSource.PlayClipAtPoint(SoundManager.soundManager.clickClip,transform.position,100f);
+        SoundManager.instance.PlaySoundTime("click", 0.5f);
+        GameObject.Find("field").GetComponent<AudioSource>().Play();
         pause = false;
         pauseUI.SetActive(false);//정지 메뉴를 안보이게 한다
         button.SetActive(true);//정지 버튼이 다시 보이게 한다
@@ -72,21 +75,20 @@ public class pauseButton : MonoBehaviour {
 
     public void mainMenu()//메인 메뉴로 돌아간다
     {
-        //SoundManager.soundManager.PlayClickSound();
+        SoundManager.instance.PlaySoundTime("click",0.5f);
         SceneManager.LoadScene("Start");
     }
     public void Restart()
     {
-        //SoundManager.soundManager.PlayClickSound();
-        //Application.LoadLevel(Application.loadedLevel);
-        //SceneManager.LoadScene("Field");
-        //pause = false;
+
+        SoundManager.instance.PlaySoundTime("click", 0.5f);
         int scene = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(scene, LoadSceneMode.Single);
     }
 
     public void deadMenu()//플레이어가 죽었을때 gameOverMenu가 보이게 한다
     {
+        GameObject.Find("field").GetComponent<AudioSource>().Stop();
         //Debug.Log("deadmenu");
         gameOverUI.SetActive(true);
     }

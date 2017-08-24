@@ -121,7 +121,7 @@ public class Rabbit_move : MonoBehaviour {
                     Char_control.collided = false;
                     if (!animalEvent.meat_invincible)//체력무적 아닐때
                     {
-                        barGage.GetComponent<Bar_meat_control>().decreaseHealthWithDec(10f);//체력게이지가 10만큼 감소된다
+                        barGage.GetComponent<Bar_meat_control>().decreaseHealthWithDec(20f);//체력게이지가 10만큼 감소된다
                     }
                     //barGage.GetComponent<Bar_meat_control>().decreaseHealthWithDec(10f);//체력게이지가 10만큼 감소된다
                 }

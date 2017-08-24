@@ -37,30 +37,26 @@ public class DoubleClickListener : MonoBehaviour {
 
             if (!firstClick)
             {
-                //GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>().Play("char_meat_attack");
-                //Debug.Log("char_meat_attack1");
+
                 firstClick = true;
                 runningTimerSecond = Time.time;
             }
             else
             {
-                //Debug.Log("char_meat_attack2");
-                //GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>().Play("char_meat_attack");
+
                 if (SelectMenu.meat_char)
                 {
                     GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>().Play("char_meat_attack");
+                    SoundManager.instance.PlaySoundTime("attack",3.9f);
                 }
                 else if(SelectMenu.fire_char)
                 {
                     GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>().Play("char_fire_attack");
-                    Debug.Log("fire attack");
+                    SoundManager.instance.PlaySoundTime("attack", 3.9f);
                 }
-                //GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>().Play("char_fire_attack");
-                //Debug.Log("doubleclick true");
+
                 firstClick = false;
                 Char_control.attackState = false;
-                //GameObject.FindGameObjectWithTag("Player").GetComponent<Char_control>().MovementType = Char_control.MovementState.walking;
-                //GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>().
                 return true;
             }
             Char_control.attackState = false;

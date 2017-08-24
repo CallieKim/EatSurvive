@@ -28,12 +28,12 @@ public class Bar_fire_control : MonoBehaviour {
         if (SelectMenu.meat_char)//체력 천천히 주는 캐릭터
         {
             //Debug.Log("meat");
-            dec_health = 0.2f;
+            dec_health = 0.3f;
             dec_delay = 0.1f;
         }
         else if (SelectMenu.fire_char)//장작 천천히 주는 캐릭터
         {
-            dec_health = 0.1f;
+            dec_health = 0.2f;
             dec_delay = 0.1f;
         }
         noFire = false;//장작 게이지는 0이 아니다

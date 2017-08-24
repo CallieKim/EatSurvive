@@ -20,3 +20,6 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Field.unity
     guid: 18f4c6bf9dfd93443b20dac55b37546c
+  - enabled: 0
+    path: Assets/Scene/hitTest.unity
+    guid: 4ac4e140c6a5b1a428fcf78e4cd2a261

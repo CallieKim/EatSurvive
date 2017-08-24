@@ -86,25 +86,25 @@ public class animalEvent : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         //Debug.Log("event update");
-		if(scoreScript.rabbitKill>10 && !rabbitHappen && !eventOn)//토끼를 10마리 잡으면 이벤트 발생한다, 시간 이벤트 발생중 아니면
+		if(scoreScript.rabbitKill>39 && !rabbitHappen && !eventOn)//토끼를 40마리 잡으면 이벤트 발생한다, 시간 이벤트 발생중 아니면
         {
+            GameObject.Find("field").GetComponent<AudioSource>().volume = 0.2f;
             //Debug.Log("event happen");
             Time.timeScale = 0;
             eventpanel.SetActive(true);
-            eventpanel.GetComponent<Image>().sprite = rabbitEvents[0];
+            eventpanel.GetComponent<Image>().sprite = rabbitEvents[13];
             rabbitHappen = true;
             scoreScript.rabbitKill = 0;
-            //rabbitEventChange();
-            //scoreScript.rabbitKill = 0;
+
         }
-        else if(scoreScript.badgerKill>5 & !badgerHappen && !eventOn)//오소리를 5마리 잡으면 이벤트 발생한다, 시간 이벤트 발생중 아니면
+        else if(scoreScript.badgerKill>14 & !badgerHappen && !eventOn)//오소리를 15마리 잡으면 이벤트 발생한다, 시간 이벤트 발생중 아니면
         {
+            GameObject.Find("field").GetComponent<AudioSource>().volume = 0.2f;
             Time.timeScale = 0;
             eventpanel.SetActive(true);
-            eventpanel.GetComponent<Image>().sprite = badgerEvents[0];
+            eventpanel.GetComponent<Image>().sprite = badgerEvents[13];
             badgerHappen = true;
             scoreScript.badgerKill = 0;//잡은 마리수 초기화
-            //badgerEventChange();
 
         }
 	}
@@ -113,12 +113,11 @@ public class animalEvent : MonoBehaviour {
     {
         if(rabbitHappen)//토끼 이벤트 발생할때
         {
-            //eventpanel.SetActive(true);
             rabbitEventChange();
         }
         else if(badgerHappen)
         {
-            //eventpanel.SetActive(true);
+
             badgerEventChange();
         }
 
@@ -126,10 +125,8 @@ public class animalEvent : MonoBehaviour {
 
     public void Skip()//스킵 버튼을 누르면 바로 선택지로 이동한다
     {
-        //gameObject.GetComponent<Image>().sprite = scene;
         if(rabbitHappen)//토끼 이벤트 발생중일때
         {
-            //Debug.Log("event skip");
             eventpanel.GetComponent<Image>().sprite = rabbitEvents[6];
             showButton();
 
@@ -146,50 +143,49 @@ public class animalEvent : MonoBehaviour {
         if (end)//이벤트 끝날때 됐으면
         {
             sceneNumber = 0;//장면 다시 초기화한다
-            //Debug.Log("end event");
             endEvent();
         }
-        if(sceneNumber==0)
+        if (sceneNumber == 0)//이벤트 첫 시작화면
         {
-            eventpanel.GetComponent<Image>().sprite = rabbitEvents[1];
+            eventpanel.GetComponent<Image>().sprite = rabbitEvents[0];
             sceneNumber++;
         }
         else if(sceneNumber==1)
         {
-            eventpanel.GetComponent<Image>().sprite = rabbitEvents[2];
+            eventpanel.GetComponent<Image>().sprite = rabbitEvents[1];
             sceneNumber++;
         }
-        else if (sceneNumber == 2)
+        else if(sceneNumber==2)
         {
-            eventpanel.GetComponent<Image>().sprite = rabbitEvents[3];
+            eventpanel.GetComponent<Image>().sprite = rabbitEvents[2];
             sceneNumber++;
         }
         else if (sceneNumber == 3)
         {
-            eventpanel.GetComponent<Image>().sprite = rabbitEvents[4];
+            eventpanel.GetComponent<Image>().sprite = rabbitEvents[3];
             sceneNumber++;
         }
         else if (sceneNumber == 4)
         {
-            eventpanel.GetComponent<Image>().sprite = rabbitEvents[5];
+            eventpanel.GetComponent<Image>().sprite = rabbitEvents[4];
             sceneNumber++;
         }
         else if (sceneNumber == 5)
+        {
+            eventpanel.GetComponent<Image>().sprite = rabbitEvents[5];
+            sceneNumber++;
+        }
+        else if (sceneNumber == 6)
         {
             eventpanel.GetComponent<Image>().sprite = rabbitEvents[6];
             showButton();
             sceneNumber++;
         }
-        /*
-        if (!selected1 && !selected2 && !selected3)
-        {
-            eventpanel.GetComponent<Image>().sprite = rabbitEvents[0];
-        }
-        */
-        //eventpanel.GetComponent<Image>().sprite = rabbitEvents[0];
+
         if (selected1)//선택지를 선택했으면 버프를 보여준다
         {
             showBuff(buffEvents[2]);//점수 1.5배
+            SoundManager.instance.PlaySound("good_buff");
             Rabbit_move.rabbitScore = 150;
             Badger_move.badgerScore = 450;
             end = true;
@@ -197,6 +193,7 @@ public class animalEvent : MonoBehaviour {
         else if(selected2)
         {
             showBuff(buffEvents[3]);//체력 무적
+            SoundManager.instance.PlaySound("good_buff");
             barMeat.GetComponent<Bar_meat_control>().invincible();
             barMeat.GetComponent<Bar_meat_control>().enabled = false;
             meat_invincible = true;
@@ -206,6 +203,7 @@ public class animalEvent : MonoBehaviour {
         else if(selected3)
         {
             showBuff(buffEvents[0]);//부정적 버프
+            SoundManager.instance.PlaySound("bad_buff");
             Rabbit_move.rabbitScore = 50;
             Badger_move.badgerScore = 150;
             end = true;
@@ -218,52 +216,52 @@ public class animalEvent : MonoBehaviour {
         if (end)//이벤트 끝날때 됐으면
         {
             sceneNumber = 0;//장면 번홏 초기화 한다
-            //Debug.Log("end event");
             endEvent();
         }
-        /*
-        if (!selected4 && !selected5 && !selected3)
-        {
-            eventpanel.GetComponent<Image>().sprite = badgerEvents[0];
-        }
-        */
-        //eventpanel.GetComponent<Image>().sprite = rabbitEvents[0];
 
         if (sceneNumber == 0)
         {
-            eventpanel.GetComponent<Image>().sprite = badgerEvents[1];
+            eventpanel.GetComponent<Image>().sprite = badgerEvents[0];
             sceneNumber++;
         }
         else if (sceneNumber == 1)
         {
-            eventpanel.GetComponent<Image>().sprite = badgerEvents[2];
+            eventpanel.GetComponent<Image>().sprite = badgerEvents[1];
             sceneNumber++;
         }
         else if (sceneNumber == 2)
         {
-            eventpanel.GetComponent<Image>().sprite = badgerEvents[3];
+            eventpanel.GetComponent<Image>().sprite = badgerEvents[2];
             sceneNumber++;
         }
         else if (sceneNumber == 3)
         {
-            eventpanel.GetComponent<Image>().sprite = badgerEvents[4];
+            eventpanel.GetComponent<Image>().sprite = badgerEvents[3];
             sceneNumber++;
         }
         else if (sceneNumber == 4)
+        {
+            eventpanel.GetComponent<Image>().sprite = badgerEvents[4];
+            sceneNumber++;
+        }
+        
+        else if (sceneNumber == 5)
         {
             eventpanel.GetComponent<Image>().sprite = badgerEvents[5];
             showButton();
             sceneNumber++;
         }
-
+        
         if (selected4)//선택지를 선택했으면 버프를 보여준다
         {
             showBuff(buffEvents[1]);//타격 강화
+            SoundManager.instance.PlaySound("good_buff");
             end = true;
         }
         else if (selected5)
         {
             showBuff(buffEvents[4]);//장작 무적
+            SoundManager.instance.PlaySound("good_buff");
             barFire.GetComponent<Bar_fire_control>().invincible();
             barFire.GetComponent<Bar_fire_control>().enabled = false;
             meat_invincible = false;
@@ -274,6 +272,7 @@ public class animalEvent : MonoBehaviour {
         {
             showBuff(buffEvents[0]);
             //동물 잡는 점수가 절반으로 줄어든다
+            SoundManager.instance.PlaySound("bad_buff");
             Rabbit_move.rabbitScore = 50;
             Badger_move.badgerScore = 150;
             end = true;
@@ -326,6 +325,7 @@ public class animalEvent : MonoBehaviour {
         Time.timeScale = 1;
         eventpanel.SetActive(false);
         timeBar.SetActive(true);
+        GameObject.Find("field").GetComponent<AudioSource>().volume = 1f;
         eventOn = true;//시간 이벤트 발생중이니 true로 설정한다
         InvokeRepeating("decreaseHealth", 0.0f, dec_delay);//0.0초후에 깎이는데, dec_delay만큼 decreaseHealth함수를 반복한다
 
@@ -413,7 +413,5 @@ public class animalEvent : MonoBehaviour {
             barFire.GetComponent<Bar_fire_control>().enabled = true;
             barFire.GetComponent<Bar_fire_control>().notInvincible();
         }
-        //barMeat.GetComponent<Bar_meat_control>().enabled = true;
-        //barFire.GetComponent<Bar_fire_control>().enabled = true;
     }
 }

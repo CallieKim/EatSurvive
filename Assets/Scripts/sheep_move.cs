@@ -25,7 +25,7 @@ public class sheep_move : MonoBehaviour {
 
     public MovementState MovementType;
 
-    public float speed = 0.5f;
+    public float speed = 1.0f;
     float speed_attacked;
     //float rotateSpeed = 2.0f;
 
@@ -125,7 +125,7 @@ public class sheep_move : MonoBehaviour {
                     Char_control.collided = false;
                     if (!animalEvent.meat_invincible)//체력무적 아닐때
                     {
-                        barGage.GetComponent<Bar_meat_control>().decreaseHealthWithDec(10f);//체력게이지가 10만큼 감소된다
+                        barGage.GetComponent<Bar_meat_control>().decreaseHealthWithDec(20f);//체력게이지가 10만큼 감소된다
                     }
                     //barGage.GetComponent<Bar_meat_control>().decreaseHealthWithDec(10f);//체력게이지가 10만큼 감소된다
                 }
@@ -182,17 +182,6 @@ public class sheep_move : MonoBehaviour {
             yield return new WaitForSeconds(0.5f);//0.5초 동안 기다림
             if (!wayP)
             {
-                /*
-                int num = Random.Range(0, 2);//0과1 중 고른다 idle, walking
-                if (num == 0)
-                {
-                    MovementType = MovementState.idle;
-                }
-                else if (num == 1)
-                {
-                    MovementType = MovementState.walking;
-                }
-                */
                 MovementType = MovementState.walking;
             }
         }
@@ -240,10 +229,7 @@ public class sheep_move : MonoBehaviour {
         }
         else if (col.tag == "Trap" && !col.GetComponent<trap_control>().trapuUsed)//동물이 함정이랑 부딪히면 발생 이때 함정은 한번도 쓰이지 않았다.
         {
-            //col.GetComponent<SpriteRenderer>().enabled = false;
-            //GameObject.FindGameObjectWithTag("Trap").GetComponent<SpriteRenderer>().enabled = false;
-            // col.GetComponent<trap_control>().disappear();//함정은 사라진다
-            //col.gameObject.SetActive(false);//부딪힌 함정만 사라진다
+
             
             scoreScript.sheepKill++;//죽인 토끼수가 증가한다
             AllAnimal.sheeps.Enqueue(gameObject);//다시 큐에 들어간다

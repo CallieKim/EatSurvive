@@ -87,7 +87,7 @@ public class trap_skill : MonoBehaviour {
             trapSize--;
             if(SelectMenu.meat_char)//체력 캐릭터이면
             {
-                bar_meat.decreaseHealthWithDec(10);//체력이 일정 수준만큼 감소된다-------------10
+                bar_meat.decreaseHealthWithDec(5);//체력이 일정 수준만큼 감소된다-------------10
             }
             else if(SelectMenu.fire_char)//장작 캐릭터이면
             {

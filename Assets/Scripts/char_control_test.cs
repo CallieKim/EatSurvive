@@ -95,6 +95,8 @@ public class char_control_test : MonoBehaviour {
         {
 
             targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+
             //Debug.Log(targetPosition);
             //Debug.Log("targetpos is " + targetPosition);
             //hitCollider = Physics2D.OverlapPoint(targetPosition);

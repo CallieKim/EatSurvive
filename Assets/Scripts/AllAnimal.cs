@@ -14,7 +14,7 @@ public class AllAnimal : MonoBehaviour {
     public static Queue<GameObject> badgers = new Queue<GameObject>();//badger 큐, 오소리는 2마리가지
     public static int badgerSize=2;
     public static Queue<GameObject> sheeps = new Queue<GameObject>();//sheep 큐, 양은 1마리..
-    public static int sheepSize = 1;
+    public static int sheepSize = 2;
 
     public bool rabbitRespawn;
     public bool badgerRespawn;
@@ -65,7 +65,7 @@ public class AllAnimal : MonoBehaviour {
         }
         badgerOrigin.SetActive(false);
         //badgerSize = 0;
-        for (int i = 0; i < 1; i++)//sheep 큐를 초기화 한다
+        for (int i = 0; i < 2; i++)//sheep 큐를 초기화 한다
         {
             GameObject sheep = (GameObject)Instantiate(sheepOrigin);
             sheeps.Enqueue(sheep);
@@ -155,7 +155,7 @@ public class AllAnimal : MonoBehaviour {
             sheepRespawn = false;
             //sheeps.Dequeue().SetActive(true);
             //sheepSize--;
-            for (int i = 0; i < 1; i++)//sheep 큐를 초기화 한다
+            for (int i = 0; i < 2; i++)//sheep 큐를 초기화 한다
             {
                 //Debug.Log("deqeue badger");
                 //GameObject badger = (GameObject)Instantiate(badgerOrigin);
@@ -163,13 +163,13 @@ public class AllAnimal : MonoBehaviour {
                 setPos(sheeps.Dequeue());
                 //badger.SetActive(true);
             }
-            sheepSize = 1;
+            sheepSize = 2;
         }
     }
 
-    IEnumerator appearAgain(GameObject other)//다시 나타나게 한다..45초 후에----------돼지
+    IEnumerator appearAgain(GameObject other)//다시 나타나게 한다..30초 후에----------돼지
     {
-        yield return new WaitForSeconds(45f);
+        yield return new WaitForSeconds(10f);
         other.SetActive(true);
         other.transform.position = new Vector3(-5.57f,-2.11f,0);//나타나는 위치를 지정해준다
         pig.GetComponent<wildPig_move>().moveToStart();//시작위치로 이동한다

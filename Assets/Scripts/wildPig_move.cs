@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class wildPig_move : MonoBehaviour {
+public class wildPig_move : MonoBehaviour
+{
     wildPig_track trackScript;
     GameObject player;
     float patrolSpeed = 2.0f;//목표지점 사이 움직이는 속도
@@ -20,7 +21,8 @@ public class wildPig_move : MonoBehaviour {
     int potatoSize = 4;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         potatoOrigin = GameObject.Find("potato");
         potatos.Enqueue(potatoOrigin);
         potatoOrigin.SetActive(false);
@@ -40,19 +42,19 @@ public class wildPig_move : MonoBehaviour {
         for (int i = 0; i < waypointsize; i++)//waypoint 큐를 초기화 시킨다
         {
             GameObject WP = (GameObject)Instantiate(WPorigin);
-            if(i==0)//위치를 각각 정한다
+            if (i == 0)//위치를 각각 정한다
             {
                 WP.transform.position = new Vector3(-5.28f, 0.18f, 0);
             }
-            else if(i==1)
+            else if (i == 1)
             {
                 WP.transform.position = new Vector3(-0.43f, 2.67f, 0);
             }
-            else if(i==2)
+            else if (i == 2)
             {
                 WP.transform.position = new Vector3(5.43f, 0.04f, 0);
             }
-            else if(i==3)
+            else if (i == 3)
             {
                 WP.transform.position = new Vector3(-0.18f, -1.88f, 0);
             }
@@ -65,7 +67,7 @@ public class wildPig_move : MonoBehaviour {
 
     void flip(GameObject other)//뒤집는 함수
     {
-        if(other.transform.position.x>gameObject.transform.position.x)
+        if (other.transform.position.x > gameObject.transform.position.x)
         {
             gameObject.GetComponent<SpriteRenderer>().flipX = false;
         }
@@ -74,11 +76,12 @@ public class wildPig_move : MonoBehaviour {
             gameObject.GetComponent<SpriteRenderer>().flipX = true;
         }
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         //Debug.Log(trackScript.track);
-		if(trackScript.track)//시야에 플레이어가 들어갔으면 플레이어를 쫓아간다
+        if (trackScript.track)//시야에 플레이어가 들어갔으면 플레이어를 쫓아간다
         {
             //Debug.Log("tracking");
             flip(player);
@@ -86,7 +89,7 @@ public class wildPig_move : MonoBehaviour {
             StopAllCoroutines();
             //trackScript.track = false;
         }
-        else if(whichWP==0)
+        else if (whichWP == 0)
         {
             //Debug.Log("moving in 0");
             waypoints[3].SetActive(false);
@@ -115,8 +118,8 @@ public class wildPig_move : MonoBehaviour {
             flip(waypoints[3]);
             move(waypoints[3]);
         }
-        
-        if(gameObject.transform.position==player.transform.position)//펠리어와 같은 위치로 이동하면 다시 갈길 간다 이때는 목표지점 0으로 간다
+
+        if (gameObject.transform.position == player.transform.position)//펠리어와 같은 위치로 이동하면 다시 갈길 간다 이때는 목표지점 0으로 간다
         {
             whichWP = 0;
             waypoints[3].SetActive(false);
@@ -127,7 +130,7 @@ public class wildPig_move : MonoBehaviour {
             move(waypoints[0]);
             trackScript.track = false;
         }
-        
+
         //waypoints[0].SetActive(true);
         //move(waypoints[0]);
 
@@ -135,7 +138,7 @@ public class wildPig_move : MonoBehaviour {
 
 
         digging();//목표지점에 도착하면 구덩이를 판다
-	}
+    }
 
     public void move(GameObject waypoint)//목표지점을 받으면 거기로 이동한다
     {
@@ -159,9 +162,9 @@ public class wildPig_move : MonoBehaviour {
 
     public void digging()//구덩이를 파면서 감자가 나오게 한다
     {
-        for(int i=0;i<waypointsize;i++)
+        for (int i = 0; i < waypointsize; i++)
         {
-            if(transform.position == waypoints[i].transform.position)//만약 목표지점에 도착했으면
+            if (transform.position == waypoints[i].transform.position)//만약 목표지점에 도착했으면
             {
                 pigAnim.SetBool("is_digging", true);//구덩이 파는 애니메이션 활성화
                 pigAnim.SetBool("is_walking", false);//걷지 않게 한다
@@ -175,13 +178,13 @@ public class wildPig_move : MonoBehaviour {
     {
         //Debug.Log("changeWP");
         yield return new WaitForSeconds(4.5f);//4.5초동안 기다린다
-        if(whichWP<3)
+        if (whichWP < 3)
         {
             whichWP++;
             setPos(potatos.Dequeue());
             StopAllCoroutines();
         }
-        else if(whichWP==3)//다시 처음 지점으로 돌아갈때 멧돼지는 사라진다
+        else if (whichWP == 3)//다시 처음 지점으로 돌아갈때 멧돼지는 사라진다
         {
             whichWP = 0;
             setPos(potatos.Dequeue());
@@ -221,7 +224,6 @@ public class wildPig_move : MonoBehaviour {
     {
         if(col.tag=="Player")
         {
-
         }
     }
     */
